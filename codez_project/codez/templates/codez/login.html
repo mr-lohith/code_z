@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login – CodeZ</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&f[]=cabinet-grotesk@300,400,500,700,800,900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --bg:        #07071a;
+    --surface:   #0f0f24;
+    --card:      #13132e;
+    --card2:     #181836;
+    --border:    #242450;
+    --border2:   #2e2e60;
+    --indigo:    #6366f1;
+    --violet:    #8b5cf6;
+    --indigo-lo: rgba(99,102,241,0.12);
+    --violet-lo: rgba(139,92,246,0.10);
+    --text:      #eeeeff;
+    --text-sec:  #9898c0;
+    --muted:     #5a5a80;
+    --easy:      #10B981;
+    --medium:    #F59E0B;
+    --hard:      #EF4444;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Cabinet Grotesk', 'General Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ── Ambient background ── */
+  body::before {
+    content:'';
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 10%, rgba(99,102,241,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 80%, rgba(139,92,246,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(99,102,241,0.05) 0%, transparent 70%);
+  }
+
+  /* ── Grid bg ── */
+  body::after {
+    content:'';
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ── Card ── */
+  .login-wrap {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 440px;
+    margin: 0 16px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow:
+      0 0 0 1px rgba(99,102,241,0.08),
+      0 24px 64px rgba(0,0,0,0.5),
+      0 0 80px rgba(99,102,241,0.06);
+  }
+
+  /* ── Logo ── */
+  .logo-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 32px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--indigo), var(--violet));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+  }
+  .logo-text {
+    font-family: 'Clash Display', 'Bricolage Grotesque', sans-serif;
+    font-weight: 700; font-size: 22px; color: var(--text);
+  }
+  .logo-text span {
+    background: linear-gradient(135deg, #818cf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Heading ── */
+  .card-heading { margin-bottom: 6px; }
+  .card-heading h1 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 26px; font-weight: 700;
+    color: var(--text);
+  }
+  .card-heading p {
+    font-size: 14px; color: var(--text-sec); margin-top: 4px;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* ── Messages ── */
+  .messages { margin-bottom: 16px; }
+  .msg {
+    padding: 10px 14px; border-radius: 10px; font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .msg-error { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+  .msg-success { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+  .msg-info { background: var(--indigo-lo); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc; }
+
+  /* ── Form ── */
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--text-sec); margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+  .input-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 14px; pointer-events: none;
+  }
+  .codez-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 15px;
+    padding: 12px 14px 12px 40px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .codez-input::placeholder { color: var(--muted); }
+  .codez-input:focus {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  }
+
+  .pw-toggle {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font-size: 14px; padding: 2px;
+    transition: color 0.2s;
+  }
+  .pw-toggle:hover { color: var(--text-sec); }
+
+  .field-error {
+    font-size: 12px; color: #fca5a5; margin-top: 6px;
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ── Options row ── */
+  .options-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; font-size: 13px;
+  }
+  .checkbox-label {
+    display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-sec);
+  }
+  .checkbox-label input[type="checkbox"] {
+    width: 15px; height: 15px; accent-color: var(--indigo); cursor: pointer;
+  }
+  .forgot-link {
+    color: var(--indigo); text-decoration: none; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .forgot-link:hover { color: var(--violet); text-decoration: underline; }
+
+  /* ── Submit ── */
+  .btn-login {
+    width: 100%;
+    background: linear-gradient(135deg, var(--indigo), var(--violet));
+    color: #fff;
+    border: none; border-radius: 10px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700;
+    padding: 13px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    position: relative; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+  }
+  .btn-login::before {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+    opacity:0; transition: opacity 0.2s;
+  }
+  .btn-login:hover { transform:translateY(-1px); box-shadow: 0 8px 28px rgba(99,102,241,0.45); }
+  .btn-login:hover::before { opacity:1; }
+  .btn-login:active { transform:translateY(0); }
+
+  /* ── Social divider ── */
+  .social-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 24px 0; font-size: 12px; color: var(--muted);
+  }
+  .social-divider::before, .social-divider::after {
+    content:''; flex:1; height:1px; background: var(--border);
+  }
+
+  /* ── Social buttons ── */
+  .social-row { display: flex; gap: 10px; }
+  .btn-social {
+    flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text-sec);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 13px; font-weight: 600; padding: 10px;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-social:hover {
+    border-color: var(--border2); color: var(--text);
+    background: var(--card2);
+  }
+
+  /* ── Footer ── */
+  .card-footer {
+    text-align: center; margin-top: 24px;
+    font-size: 14px; color: var(--text-sec);
+  }
+  .card-footer a {
+    color: var(--indigo); font-weight: 600; text-decoration: none;
+    transition: color 0.2s;
+  }
+  .card-footer a:hover { color: var(--violet); text-decoration: underline; }
+
+  /* ── Floating orbs ── */
+  .orb {
+    position: fixed; border-radius: 50%;
+    pointer-events: none; z-index: 0; filter: blur(60px);
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 {
+    width:300px; height:300px; top:-80px; left:-80px;
+    background: rgba(99,102,241,0.08);
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width:200px; height:200px; bottom:-60px; right:-60px;
+    background: rgba(139,92,246,0.08);
+    animation-delay: -4s;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <!-- Logo -->
+    <a href="/" class="logo-row">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <span class="logo-text">Code<span>Z</span></span>
+    </a>
+
+    <!-- Heading -->
+    <div class="card-heading">
+      <h1>Welcome back</h1>
+      <p>Sign in to continue your coding journey</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Django Messages -->
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="msg msg-{{ message.tags }}">
+        <i class="fas {% if message.tags == 'error' %}fa-circle-xmark{% elif message.tags == 'success' %}fa-circle-check{% else %}fa-circle-info{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Login Form -->
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-user"></i></span>
+          {{ form.username }}
+        </div>
+        {% if form.username.errors %}
+          {% for error in form.username.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        {% if form.password.errors %}
+          {% for error in form.password.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- Options -->
+      <div class="options-row">
+        <label class="checkbox-label">
+          <input type="checkbox" name="remember_me"> Remember me
+        </label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <!-- Hidden next -->
+      {% if request.GET.next %}
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+
+      <button type="submit" class="btn-login">
+        <i class="fas fa-arrow-right-to-bracket" style="margin-right:8px;"></i>
+        Sign In
+      </button>
+    </form>
+
+    <!-- Social Login Divider -->
+    <div class="social-divider">or continue with</div>
+    <div class="social-row">
+      <a href="#" class="btn-social">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="#" class="btn-social">
+        <i class="fab fa-google"></i> Google
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      Don't have an account? <a href="{% url 'register' %}">Create one free</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function togglePw(btn) {
+  const wrap = btn.closest('.input-wrap');
+  const inp = wrap.querySelector('input');
+  const icon = btn.querySelector('i');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.className = 'fas fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    icon.className = 'fas fa-eye';
+  }
+}
+</script>
+</body>
+</html>

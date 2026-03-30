@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Register – CodeZ</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&f[]=cabinet-grotesk@300,400,500,700,800,900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --bg:#07071a; --surface:#0f0f24; --card:#13132e; --card2:#181836;
+    --border:#242450; --border2:#2e2e60;
+    --indigo:#6366f1; --violet:#8b5cf6;
+    --indigo-lo:rgba(99,102,241,0.12);
+    --text:#eeeeff; --text-sec:#9898c0; --muted:#5a5a80;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Cabinet Grotesk',sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding: 40px 16px;
+  }
+  body::before {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 10%,rgba(99,102,241,0.13) 0%,transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 80%,rgba(139,92,246,0.10) 0%,transparent 60%);
+  }
+  body::after {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(99,102,241,0.04) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+  .login-wrap { position:relative; z-index:10; width:100%; max-width:460px; animation:fadeUp 0.5s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .login-card {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:40px 36px;
+    box-shadow:0 0 0 1px rgba(99,102,241,0.08),0 24px 64px rgba(0,0,0,0.5);
+  }
+  .logo-row { display:flex; align-items:center; gap:10px; margin-bottom:28px; text-decoration:none; }
+  .logo-icon {
+    width:38px; height:38px; border-radius:10px;
+    background:linear-gradient(135deg,var(--indigo),var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; color:#fff; box-shadow:0 4px 16px rgba(99,102,241,0.4);
+  }
+  .logo-text { font-family:'Clash Display',sans-serif; font-weight:700; font-size:22px; color:var(--text); }
+  .logo-text span { background:linear-gradient(135deg,#818cf8,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .card-heading h1 { font-family:'Clash Display',sans-serif; font-size:26px; font-weight:700; }
+  .card-heading p { font-size:14px; color:var(--text-sec); margin-top:4px; }
+  .divider { height:1px; background:var(--border); margin:24px 0; }
+  .messages { margin-bottom:16px; }
+  .msg { padding:10px 14px; border-radius:10px; font-size:13px; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .msg-error { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
+  .msg-success { background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#6ee7b7; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; color:var(--text-sec); margin-bottom:8px; }
+  .input-wrap { position:relative; }
+  .input-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
+  .codez-input {
+    width:100%; background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; color:var(--text);
+    font-family:'Cabinet Grotesk',sans-serif; font-size:15px;
+    padding:12px 14px 12px 40px; outline:none;
+    transition:border-color 0.2s,box-shadow 0.2s;
+  }
+  .codez-input::placeholder { color:var(--muted); }
+  .codez-input:focus { border-color:var(--indigo); box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
+  .pw-toggle { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:14px; transition:color 0.2s; }
+  .pw-toggle:hover { color:var(--text-sec); }
+  .field-error { font-size:12px; color:#fca5a5; margin-top:5px; display:flex; align-items:center; gap:4px; }
+  .btn-login {
+    width:100%; background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff; border:none; border-radius:10px;
+    font-family:'Cabinet Grotesk',sans-serif; font-size:15px; font-weight:700;
+    padding:13px; cursor:pointer; margin-top:8px;
+    transition:transform 0.15s,box-shadow 0.2s;
+    box-shadow:0 4px 20px rgba(99,102,241,0.35);
+  }
+  .btn-login:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(99,102,241,0.45); }
+  .card-footer { text-align:center; margin-top:24px; font-size:14px; color:var(--text-sec); }
+  .card-footer a { color:var(--indigo); font-weight:600; text-decoration:none; transition:color 0.2s; }
+  .card-footer a:hover { color:var(--violet); text-decoration:underline; }
+  .strength-bar { height:4px; border-radius:2px; background:var(--border); margin-top:8px; overflow:hidden; }
+  .strength-fill { height:100%; border-radius:2px; width:0%; transition:width 0.3s,background 0.3s; }
+  .orb { position:fixed; border-radius:50%; pointer-events:none; z-index:0; filter:blur(60px); animation:float 8s ease-in-out infinite; }
+  .orb-1 { width:300px; height:300px; top:-80px; left:-80px; background:rgba(99,102,241,0.08); }
+  .orb-2 { width:200px; height:200px; bottom:-60px; right:-60px; background:rgba(139,92,246,0.08); animation-delay:-4s; }
+  @keyframes float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <a href="/" class="logo-row">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <span class="logo-text">Code<span>Z</span></span>
+    </a>
+
+    <div class="card-heading">
+      <h1>Create account</h1>
+      <p>Join thousands of coders on CodeZ today</p>
+    </div>
+
+    <div class="divider"></div>
+
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="msg msg-{{ message.tags }}">
+        <i class="fas {% if message.tags == 'error' %}fa-circle-xmark{% else %}fa-circle-check{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+
+      <div class="form-row">
+        <!-- Username -->
+        <div class="form-group">
+          <label>Username</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-user"></i></span>
+            {{ form.username }}
+          </div>
+          {% for error in form.username.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            {{ form.email }}
+          </div>
+          {% for error in form.email.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password1 }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        {% for error in form.password1.errors %}
+        <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password2 }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)"><i class="fas fa-eye"></i></button>
+        </div>
+        {% for error in form.password2.errors %}
+        <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn-login">
+        <i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account
+      </button>
+    </form>
+
+    <div class="card-footer">
+      Already have an account? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePw(btn) {
+  const inp = btn.closest('.input-wrap').querySelector('input');
+  const icon = btn.querySelector('i');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.className = inp.type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+
+// Password strength meter
+document.addEventListener('DOMContentLoaded', () => {
+  const pw = document.querySelector('input[name="password1"]');
+  const fill = document.getElementById('strengthFill');
+  if (!pw || !fill) return;
+  pw.addEventListener('input', () => {
+    const v = pw.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    const colors = ['#EF4444','#F59E0B','#6366f1','#10B981'];
+    const widths = ['25%','50%','75%','100%'];
+    fill.style.width = v ? widths[score - 1] || '10%' : '0%';
+    fill.style.background = v ? colors[score - 1] || '#EF4444' : 'transparent';
+  });
+});
+</script>
+</body>
+</html>
