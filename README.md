@@ -1,120 +1,71 @@
+# CodeZ – Django Project Setup
 
-# CODE Z – Social Learning for Coders
-CODE Z is a community-driven platform where developers and engineers collaborate to solve coding challenges, debug broken snippets, and discuss algorithmic efficiency. Unlike traditional competitive platforms, IdeaHub prioritizes the "Social" aspect of learning through a Reddit-inspired feed
-# CodeZ Django Project
-# CODE Z
-
-![IdeaHub Logo](ideahub_logo%20.png)
-
-A platform where ideas meet code.
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-```bash
-pip install django pillow
+## 📁 Project Structure
+```
+codez_project/
+├── manage.py
+├── requirements.txt
+├── db.sqlite3          ← created after migrate
+├── codez_project/
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── codez/
+    ├── views.py        ← login, register, home, profile logic
+    ├── urls.py         ← all URL routes
+    ├── templates/
+    │   └── codez/
+    │       ├── login.html      ✅ New – styled login page
+    │       ├── register.html   ✅ New – styled register page
+    │       ├── home.html       ✅ Your original HomePage.html (Django connected)
+    │       └── profile.html    ✅ Your original UserProfile.html (Django connected)
 ```
 
-### 2. Run Migrations
-```bash
-cd codez_project
-python manage.py makemigrations
+## 🚀 How to Run on Windows
+
+### Step 1 – Install Python
+Download from python.org → **check "Add Python to PATH"**
+
+### Step 2 – Open Command Prompt
+Win + R → type `cmd` → Enter
+
+### Step 3 – Install Django
+```
+pip install django
+```
+
+### Step 4 – Extract ZIP & navigate
+```
+cd Desktop\codez_project
+```
+
+### Step 5 – Create database
+```
 python manage.py migrate
 ```
 
-### 3. Create Superuser (to add problems via admin)
-```bash
+### Step 6 – Create admin user
+```
 python manage.py createsuperuser
 ```
 
-### 4. Run Server
-```bash
+### Step 7 – Run server
+```
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000/`
+### Step 8 – Open browser
+| Page | URL |
+|------|-----|
+| Login | http://127.0.0.1:8000/login/ |
+| Register | http://127.0.0.1:8000/register/ |
+| Home Feed | http://127.0.0.1:8000/ |
+| My Profile | http://127.0.0.1:8000/profile/ |
+| Admin | http://127.0.0.1:8000/admin/ |
 
----
-
-## 📄 Pages & URLs
-
-| URL | View | Description |
-|-----|------|-------------|
-| `/` | `home_view` | Homepage — problem feed (login required) |
-| `/login/` | `login_view` | Login page |
-| `/register/` | `register_view` | Registration page |
-| `/logout/` | `logout_view` | Logout (redirects to login) |
-| `/profile/` | `profile_view` | Your own profile (login required) |
-| `/profile/<username>/` | `profile_view` | Any user's profile (login required) |
-| `/admin/` | Django admin | Add/edit problems, users |
-
----
-
-## 🔗 Avatar → Profile Navigation
-
-The navbar avatar on the homepage is linked to the user's profile page:
-
-```html
-<!-- In home.html nav -->
-<a href="{% url 'my_profile' %}" class="nav-avatar-btn">
-  <div class="...avatar...">{{ request.user.username|first|upper }}</div>
-</a>
-```
-
-Clicking the avatar takes the logged-in user to `/profile/`.
-
----
-
-## 🎨 Styling
-
-All pages follow the same **indigo/purple dark theme**:
-- Background: `#07071a` / `#0d0d1a`
-- Accent: `#6366f1` (indigo), `#8b5cf6` (violet)
-- Font: DM Sans + JetBrains Mono
-- Tailwind CSS (CDN) + custom CSS variables
-
----
-
-## 🗃️ Models
-
-**UserProfile** — extends Django's `User`:
-- `bio`, `avatar`, `location`
-- `github_url`, `linkedin_url`, `twitter_url`
-- `rating` (default 1500), `problems_solved`, `streak`
-- `rank`, `is_online`
-
-**Problem**:
-- `title`, `slug`, `description`
-- `difficulty` (easy/medium/hard)
-- `tags` (JSON list)
-- `upvotes`, `acceptance_rate`
-- `is_premium`
-
----
-
-## ➕ Adding Problems
-
-1. Go to `/admin/`
-2. Log in with superuser credentials
-3. Click **Problems → Add Problem**
-4. Fill in title, slug, description, difficulty, tags (as JSON list e.g. `["arrays", "loops"]`)
-
----
-
-## 🔒 Authentication Flow
-
-```
-Unauthenticated → / → redirects to /login/
-Login success → redirects to / (homepage)
-Register → auto-login → redirects to /
-Logout → redirects to /login/
-```
-
-
-## Authors
-- [LOHITH A.S](https://github.com/mr-lohith)
-- [ARYAN JAYAN MENON ](https://github.com/aryanjm1405)
-- [SOURAV SURESH](https://github.com/souravofficialx)
-
-## Appendix
-
-Any additional information goes here
+## 🔗 What's Connected
+- **Avatar (TH)** on HomePage → clicks through to your Profile page
+- **Back to Feed** on Profile → goes back to HomePage
+- **Login/Register** → full authentication with session
+- **Logout** → clears session, redirects to login
+- All pages are **protected** – unauthenticated users go to /login/

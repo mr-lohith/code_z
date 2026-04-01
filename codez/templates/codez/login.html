@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login – CodeZ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: { action:'#6366f1', premium:'#FF6B35' },
+        fontFamily: { sans:['DM Sans','sans-serif'], mono:['JetBrains Mono','monospace'] }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --bg:#0d0d1a; --card:#13132a; --border:#252545; --muted:#7c7c9a;
+    --text:#e8e8ff; --text-sec:#a0a0c8; --tag-bg:#1e1b4b; --tag-text:#a78bfa;
+    --nav-bg:#0f0f22; --input-bg:#0a0a18; --indigo:#6366f1; --violet:#8b5cf6;
+    --indigo-lo:rgba(99,102,241,0.12);
+  }
+  * { font-family:'DM Sans',sans-serif; box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background:var(--bg); color:var(--text); min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px 16px;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 20% 10%, rgba(99,102,241,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  body::after {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+    background-size:40px 40px;
+  }
+
+  /* ── Card ── */
+  .auth-wrap {
+    position:relative; z-index:10; width:100%; max-width:420px;
+    animation:fadeUp 0.45s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+  .auth-card {
+    background:var(--card); border:1px solid var(--border); border-radius:18px;
+    padding:38px 34px;
+    box-shadow:0 0 0 1px rgba(99,102,241,0.08), 0 20px 60px rgba(0,0,0,0.55);
+  }
+
+  /* ── Logo ── */
+  .logo-row { display:flex; align-items:center; gap:10px; margin-bottom:28px; text-decoration:none; }
+  .logo-icon {
+    width:36px; height:36px; border-radius:10px;
+    background:linear-gradient(135deg,var(--indigo),var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:16px;
+    box-shadow:0 4px 14px rgba(99,102,241,0.4);
+  }
+  .logo-text { font-weight:700; font-size:20px; color:var(--text); }
+  .logo-text span {
+    background:linear-gradient(135deg,#818cf8,#a78bfa);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  /* ── Headings ── */
+  .auth-title { font-size:24px; font-weight:700; margin-bottom:4px; }
+  .auth-sub { font-size:13px; color:var(--text-sec); margin-bottom:24px; }
+  .auth-divider { height:1px; background:var(--border); margin:22px 0; }
+
+  /* ── Messages ── */
+  .msg { padding:10px 14px; border-radius:10px; font-size:13px;
+         display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .msg-error  { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
+  .msg-success{ background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#6ee7b7; }
+
+  /* ── Form ── */
+  .form-group { margin-bottom:16px; }
+  .form-label { display:block; font-size:12px; font-weight:600; color:var(--text-sec);
+                margin-bottom:7px; letter-spacing:0.3px; text-transform:uppercase; }
+  .input-wrap { position:relative; }
+  .input-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%);
+                color:var(--muted); font-size:13px; pointer-events:none; }
+  .codez-input {
+    width:100%; background:var(--input-bg); border:1px solid var(--border);
+    border-radius:10px; color:var(--text); font-family:'DM Sans',sans-serif;
+    font-size:14px; padding:11px 13px 11px 38px; outline:none;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .codez-input::placeholder { color:var(--muted); }
+  .codez-input:focus { border-color:var(--indigo); box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
+  .pw-toggle {
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px;
+    transition:color 0.15s;
+  }
+  .pw-toggle:hover { color:var(--text-sec); }
+  .field-error { font-size:11px; color:#fca5a5; margin-top:5px;
+                 display:flex; align-items:center; gap:4px; }
+
+  /* ── Options row ── */
+  .opts-row { display:flex; align-items:center; justify-content:space-between;
+              margin-bottom:22px; font-size:13px; }
+  .check-label { display:flex; align-items:center; gap:7px; cursor:pointer; color:var(--text-sec); }
+  .check-label input { accent-color:var(--indigo); width:14px; height:14px; cursor:pointer; }
+  .forgot-link { color:var(--indigo); text-decoration:none; font-weight:500; transition:color 0.15s; }
+  .forgot-link:hover { color:var(--violet); }
+
+  /* ── Submit ── */
+  .btn-submit {
+    width:100%; background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif;
+    font-size:14px; font-weight:700; padding:12px; cursor:pointer;
+    box-shadow:0 4px 18px rgba(99,102,241,0.35);
+    transition:transform 0.15s, box-shadow 0.2s; position:relative; overflow:hidden;
+  }
+  .btn-submit::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);
+    opacity:0; transition:opacity 0.2s;
+  }
+  .btn-submit:hover { transform:translateY(-1px); box-shadow:0 8px 26px rgba(99,102,241,0.45); }
+  .btn-submit:hover::before { opacity:1; }
+  .btn-submit:active { transform:translateY(0); }
+
+  /* ── Social divider ── */
+  .social-div { display:flex; align-items:center; gap:10px; margin:20px 0; font-size:12px; color:var(--muted); }
+  .social-div::before,.social-div::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* ── Social btns ── */
+  .social-row { display:flex; gap:9px; margin-bottom:20px; }
+  .btn-social {
+    flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+    background:var(--input-bg); border:1px solid var(--border);
+    border-radius:10px; color:var(--text-sec); font-family:'DM Sans',sans-serif;
+    font-size:13px; font-weight:600; padding:10px; cursor:pointer; text-decoration:none;
+    transition:all 0.15s;
+  }
+  .btn-social:hover { border-color:#4b4b7a; color:var(--text); background:var(--card); }
+
+  /* ── Footer ── */
+  .auth-footer { text-align:center; font-size:13px; color:var(--text-sec); }
+  .auth-footer a { color:var(--indigo); font-weight:600; text-decoration:none; transition:color 0.15s; }
+  .auth-footer a:hover { color:var(--violet); }
+
+  /* ── Strength bar ── */
+  .strength-track { height:3px; background:var(--border); border-radius:99px; margin-top:7px; overflow:hidden; }
+  .strength-fill  { height:100%; border-radius:99px; width:0; transition:width 0.3s,background 0.3s; }
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <a href="/" class="logo-row">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <span class="logo-text">Code<span>Z</span></span>
+    </a>
+
+    <!-- Heading -->
+    <div class="auth-title">Welcome back 👋</div>
+    <div class="auth-sub">Sign in to continue your coding journey</div>
+
+    <div class="auth-divider"></div>
+
+    <!-- Django messages -->
+    {% if messages %}
+      {% for message in messages %}
+      <div class="msg msg-{{ message.tags }}">
+        <i class="fas {% if 'error' in message.tags %}fa-circle-xmark{% else %}fa-circle-check{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Non-field errors -->
+    {% if form.non_field_errors %}
+      <div class="msg msg-error">
+        <i class="fas fa-circle-xmark"></i>
+        {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-user"></i></span>
+          {{ form.username }}
+        </div>
+        {% for e in form.username.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)"><i class="fas fa-eye"></i></button>
+        </div>
+        {% for e in form.password.errors %}
+          <div class="field-error"><i class="fas fa-triangle-exclamation"></i> {{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Options -->
+      <div class="opts-row">
+        <label class="check-label">
+          <input type="checkbox" name="remember"> Remember me
+        </label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+
+      <button type="submit" class="btn-submit">
+        <i class="fas fa-arrow-right-to-bracket" style="margin-right:8px;"></i>Sign In
+      </button>
+    </form>
+
+    <!-- Social -->
+    <div class="social-div">or continue with</div>
+    <div class="social-row">
+      <a href="#" class="btn-social"><i class="fab fa-github"></i> GitHub</a>
+      <a href="#" class="btn-social"><i class="fab fa-google"></i> Google</a>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="{% url 'register' %}">Create one free</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function togglePw(btn) {
+  const inp = btn.closest('.input-wrap').querySelector('input');
+  const ico = btn.querySelector('i');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  ico.className = inp.type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+</script>
+</body>
+</html>
