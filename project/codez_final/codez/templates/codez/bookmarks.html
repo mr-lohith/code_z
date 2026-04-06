@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bookmarks – CodeZ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['DM Sans','sans-serif']}}}}</script>
+<style>
+:root{--bg:#F6F7F8;--card:#FFFFFF;--border:#EDEFF1;--muted:#878A8C;--text:#1a1a2e;--text-sec:#4b5563;--tag-bg:#ede9fe;--tag-text:#6d28d9;--nav-bg:#ffffff;--hover-row:#f5f3ff;--scroll-thumb:#c4b5fd;}
+[data-theme="dark"]{--bg:#0d0d1a;--card:#13132a;--border:#252545;--muted:#7c7c9a;--text:#e8e8ff;--text-sec:#a0a0c8;--tag-bg:#1e1b4b;--tag-text:#a78bfa;--nav-bg:#0f0f22;--hover-row:#1a1a35;--scroll-thumb:#4338ca;}
+*{font-family:'DM Sans',sans-serif;}body{background:var(--bg);color:var(--text);min-height:100vh;}
+nav.topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);}
+.card-base{background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.bm-row{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .15s;}
+.bm-row:last-child{border-bottom:none;}
+.bm-row:hover{background:var(--hover-row);}
+.tag{background:var(--tag-bg);color:var(--tag-text);font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
+.diff-easy{background:rgba(16,185,129,.15);color:#10B981;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;}
+.diff-medium{background:rgba(245,158,11,.15);color:#F59E0B;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;}
+.diff-hard{background:rgba(239,68,68,.15);color:#EF4444;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;}
+.grad-text{background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav.bottomnav{background:var(--nav-bg);border-top:1px solid var(--border);}
+#themeToggle{position:relative;width:46px;height:24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:99px;cursor:pointer;border:none;outline:none;}
+#themeToggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s;}
+[data-theme="dark"] #themeToggle::after{transform:translateX(22px);}
+#themeToggle .icon-sun{position:absolute;top:50%;transform:translateY(-50%);left:5px;font-size:10px;color:#fff;pointer-events:none;}
+#themeToggle .icon-moon{position:absolute;top:50%;transform:translateY(-50%);right:5px;font-size:10px;color:#fff;pointer-events:none;}
+</style>
+</head>
+<body>
+<nav class="topnav sticky top-0 z-50 shadow-sm">
+  <div class="max-w-4xl mx-auto px-4 h-12 flex items-center gap-3">
+    <a href="{% url 'home' %}" class="flex items-center gap-2" style="text-decoration:none;">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);"><i class="fa-solid fa-code text-white text-sm"></i></div>
+      <span class="font-bold text-lg hidden sm:block text-t">Code<span class="grad-text">Z</span></span>
+    </a>
+    <div class="ml-auto flex items-center gap-2">
+      <button id="themeToggle" onclick="toggleTheme()"><i class="icon-sun fa-solid fa-sun"></i><i class="icon-moon fa-solid fa-moon"></i></button>
+      <a href="{% url 'my_profile' %}" style="text-decoration:none;" class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">{{ request.user.username|slice:':2'|upper }}</a>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-2xl mx-auto px-4 py-6 pb-24">
+  <div class="flex items-center gap-3 mb-4">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);"><i class="fa-solid fa-bookmark text-white"></i></div>
+    <div>
+      <h1 class="text-xl font-bold text-t">Bookmarks</h1>
+      <p class="text-xs" style="color:var(--muted);">{{ bookmarks|length }} saved problem{{ bookmarks|length|pluralize }}</p>
+    </div>
+  </div>
+
+  <div class="card-base overflow-hidden">
+    {% if bookmarks %}
+      {% for bm in bookmarks %}
+      <div class="bm-row">
+        <div class="flex-1 min-w-0">
+          <a href="{% url 'question_detail' bm.question.pk %}" class="text-sm font-semibold hover:text-indigo-400 transition-colors text-t" style="text-decoration:none;">{{ bm.question.title }}</a>
+          <div class="flex items-center gap-2 flex-wrap mt-1">
+            <span class="diff-{{ bm.question.difficulty }}">{{ bm.question.get_difficulty_display }}</span>
+            {% for tag in bm.question.tags.all|slice:":3" %}<span class="tag">{{ tag.name }}</span>{% endfor %}
+          </div>
+          <p class="text-[11px] mt-1" style="color:var(--muted);">Saved {{ bm.created_at|timesince }} ago · by {{ bm.question.author.username }}</p>
+        </div>
+        <button onclick="removeBookmark(this, {{ bm.question.pk }})" class="text-indigo-400 hover:text-red-400 transition-colors p-1.5" title="Remove bookmark">
+          <i class="fa-solid fa-bookmark text-sm"></i>
+        </button>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="py-16 text-center">
+        <i class="fa-regular fa-bookmark text-4xl mb-3" style="color:var(--muted);display:block;"></i>
+        <p class="text-sm font-semibold text-t">No bookmarks yet</p>
+        <p class="text-xs mt-1" style="color:var(--muted);">Click the bookmark icon on any problem to save it here.</p>
+        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">Browse Problems</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<nav class="bottomnav xl:hidden fixed bottom-0 left-0 right-0 flex justify-around py-2 z-50">
+  <a href="{% url 'home' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px]">Home</span></a>
+  <a href="{% url 'search' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-magnifying-glass text-lg"></i><span class="text-[10px]">Search</span></a>
+  <a href="{% url 'bookmarks' %}" class="flex flex-col items-center gap-0.5 text-indigo-400" style="text-decoration:none;"><i class="fa-solid fa-bookmark text-lg"></i><span class="text-[10px]">Saved</span></a>
+  <a href="{% url 'my_profile' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-regular fa-user text-lg"></i><span class="text-[10px]">Profile</span></a>
+</nav>
+<div class="xl:hidden h-14"></div>
+
+<script>
+const CSRF = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '';
+function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('codez-theme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('codez-theme');if(s)document.documentElement.setAttribute('data-theme',s);else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+function removeBookmark(btn, pk){
+  fetch(`/api/bookmark/${pk}/`,{method:'POST',headers:{'X-CSRFToken':CSRF,'Content-Type':'application/json'}})
+  .then(r=>r.json()).then(d=>{if(!d.bookmarked){btn.closest('.bm-row').remove();}});
+}
+</script>
+</body>
+</html>

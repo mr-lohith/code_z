@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Search{% if q %}: {{ q }}{% endif %} – CodeZ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{action:'#6366f1'},fontFamily:{sans:['DM Sans','sans-serif']}}}}</script>
+<style>
+:root{--bg:#F6F7F8;--card:#FFFFFF;--border:#EDEFF1;--muted:#878A8C;--text:#1a1a2e;--text-sec:#4b5563;--tag-bg:#ede9fe;--tag-text:#6d28d9;--nav-bg:#ffffff;--hover-row:#f5f3ff;--scroll-thumb:#c4b5fd;--input-bg:#F6F7F8;}
+[data-theme="dark"]{--bg:#0d0d1a;--card:#13132a;--border:#252545;--muted:#7c7c9a;--text:#e8e8ff;--text-sec:#a0a0c8;--tag-bg:#1e1b4b;--tag-text:#a78bfa;--nav-bg:#0f0f22;--hover-row:#1a1a35;--scroll-thumb:#4338ca;--input-bg:#0a0a18;}
+*{font-family:'DM Sans',sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;}
+nav.topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);}
+.card-base{background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.result-card{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .15s;text-decoration:none;color:inherit;}
+.result-card:last-child{border-bottom:none;}
+.result-card:hover{background:var(--hover-row);}
+.tag{background:var(--tag-bg);color:var(--tag-text);font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
+.diff-easy{background:rgba(16,185,129,.15);color:#10B981;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.diff-medium{background:rgba(245,158,11,.15);color:#F59E0B;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.diff-hard{background:rgba(239,68,68,.15);color:#EF4444;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.search-input{background:var(--input-bg);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:11px 16px;font-size:14px;outline:none;transition:all .2s;width:100%;}
+.search-input:focus{border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.2);}
+.grad-text{background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+nav.bottomnav{background:var(--nav-bg);border-top:1px solid var(--border);}
+#themeToggle{position:relative;width:46px;height:24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:99px;cursor:pointer;border:none;outline:none;}
+#themeToggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s cubic-bezier(.4,0,.2,1);}
+[data-theme="dark"] #themeToggle::after{transform:translateX(22px);}
+#themeToggle .icon-sun{position:absolute;top:50%;transform:translateY(-50%);left:5px;font-size:10px;color:#fff;pointer-events:none;}
+#themeToggle .icon-moon{position:absolute;top:50%;transform:translateY(-50%);right:5px;font-size:10px;color:#fff;pointer-events:none;}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="topnav sticky top-0 z-50 shadow-sm">
+  <div class="max-w-4xl mx-auto px-4 h-12 flex items-center gap-3">
+    <a href="{% url 'home' %}" class="flex items-center gap-2 min-w-max" style="text-decoration:none;">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);"><i class="fa-solid fa-code text-white text-sm"></i></div>
+      <span class="font-bold text-lg hidden sm:block text-t">Code<span class="grad-text">Z</span></span>
+    </a>
+    <div class="flex-1 max-w-xl mx-2">
+      <form method="GET" action="{% url 'search' %}">
+        <input name="q" type="text" value="{{ q }}" placeholder="Search problems, tags, or users…" class="search-input" autofocus/>
+      </form>
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <button id="themeToggle" onclick="toggleTheme()"><i class="icon-sun fa-solid fa-sun"></i><i class="icon-moon fa-solid fa-moon"></i></button>
+      <a href="{% url 'my_profile' %}" style="text-decoration:none;" class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">{{ request.user.username|slice:':2'|upper }}</a>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-4xl mx-auto px-4 py-6 pb-24">
+  {% if q %}
+  <p class="text-sm mb-4" style="color:var(--muted);">
+    Results for <strong class="text-t">"{{ q }}"</strong> — {{ results|length }} problem{{ results|length|pluralize }}, {{ users|length }} user{{ users|length|pluralize }}
+  </p>
+
+  <div class="flex gap-5 items-start">
+    <main class="flex-1 min-w-0 flex flex-col gap-4">
+      <!-- Questions -->
+      {% if results %}
+      <div class="card-base overflow-hidden">
+        <div class="px-4 py-2.5 border-b" style="border-color:var(--border);">
+          <h2 class="text-xs font-bold" style="color:var(--muted);"><i class="fa-solid fa-code mr-1"></i>PROBLEMS ({{ results|length }})</h2>
+        </div>
+        {% for q_item in results %}
+        <a href="{% url 'question_detail' q_item.pk %}" class="result-card">
+          <div class="flex-1 min-w-0">
+            <h3 class="text-sm font-semibold text-t mb-1 hover:text-indigo-400 transition-colors">{{ q_item.title }}</h3>
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="diff-{{ q_item.difficulty }}">{{ q_item.get_difficulty_display }}</span>
+              {% for tag in q_item.tags.all|slice:":3" %}<span class="tag">{{ tag.name }}</span>{% endfor %}
+            </div>
+            <p class="text-xs truncate" style="color:var(--muted);">by {{ q_item.author.username }} · {{ q_item.views }} views · {{ q_item.answer_count }} answers</p>
+          </div>
+          <i class="fa-solid fa-arrow-right text-xs flex-shrink-0 mt-1" style="color:var(--muted);"></i>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if not results %}
+      <div class="card-base p-10 text-center">
+        <i class="fa-solid fa-magnifying-glass text-3xl mb-3" style="color:var(--muted);display:block;"></i>
+        <p class="text-sm font-semibold text-t">No problems found for "{{ q }}"</p>
+        <p class="text-xs mt-1" style="color:var(--muted);">Try different keywords or browse all problems</p>
+        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">Browse Feed</a>
+      </div>
+      {% endif %}
+    </main>
+
+    <!-- Users sidebar -->
+    {% if users %}
+    <aside class="hidden sm:block w-56 shrink-0 sticky top-16">
+      <div class="card-base p-3">
+        <h2 class="text-xs font-bold mb-2" style="color:var(--muted);"><i class="fa-solid fa-users mr-1"></i>USERS ({{ users|length }})</h2>
+        <div class="space-y-2">
+          {% for u in users %}
+          <a href="{% url 'user_profile' u.username %}" class="flex items-center gap-2 p-1.5 rounded-lg transition" style="text-decoration:none;color:inherit;" onmouseover="this.style.background='var(--hover-row)'" onmouseout="this.style.background=''">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ u.username|slice:':2'|upper }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-semibold text-t truncate">{{ u.username }}</div>
+              <div class="text-[10px]" style="color:var(--muted);">{% if u.profile %}{{ u.profile.points }} pts{% endif %}</div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </aside>
+    {% endif %}
+  </div>
+
+  {% else %}
+  <!-- No query yet — show trending tags -->
+  <div class="text-center py-12">
+    <i class="fa-solid fa-magnifying-glass text-4xl mb-4" style="color:var(--muted);display:block;"></i>
+    <h2 class="text-lg font-bold text-t mb-1">Search CodeZ</h2>
+    <p class="text-sm" style="color:var(--muted);">Find problems, tags, and users</p>
+  </div>
+  {% endif %}
+</div>
+
+<nav class="bottomnav xl:hidden fixed bottom-0 left-0 right-0 flex justify-around py-2 z-50">
+  <a href="{% url 'home' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px]">Home</span></a>
+  <a href="{% url 'search' %}" class="flex flex-col items-center gap-0.5 text-indigo-400" style="text-decoration:none;"><i class="fa-solid fa-magnifying-glass text-lg"></i><span class="text-[10px]">Search</span></a>
+  <a href="{% url 'leaderboard' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-trophy text-lg"></i><span class="text-[10px]">Ranks</span></a>
+  <a href="{% url 'my_profile' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-regular fa-user text-lg"></i><span class="text-[10px]">Profile</span></a>
+</nav>
+<div class="xl:hidden h-14"></div>
+<script>
+function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('codez-theme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('codez-theme');if(s)document.documentElement.setAttribute('data-theme',s);else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+</script>
+</body>
+</html>
