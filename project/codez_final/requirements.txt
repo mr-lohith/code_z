@@ -1,0 +1,10 @@
+# Core framework
+Django>=4.2,<5.2
+
+# Image handling (for avatar uploads if added later)
+Pillow>=10.0
+
+# Optional but recommended for production
+# gunicorn>=21.0        # WSGI server
+# whitenoise>=6.6       # Static file serving
+# django-debug-toolbar  # Debugging in development

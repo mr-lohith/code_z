@@ -1,0 +1,1645 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{{ question.title|default:"Reverse a Linked List in Python" }} – CodeZ</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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"/>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          action: '#6366f1',
+          actionHover: '#4f46e5',
+          premium: '#FF6B35',
+          upvote: '#FF4500',
+          medium: '#F59E0B',
+          hard: '#EF4444',
+          easy: '#10B981',
+        },
+        fontFamily: {
+          sans: ['DM Sans', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+
+/* ── CSS VARIABLES (light / dark) – identical to homepage ── */
+:root {
+  --bg:          #F6F7F8;
+  --card:        #FFFFFF;
+  --border:      #EDEFF1;
+  --muted:       #878A8C;
+  --text:        #1a1a2e;
+  --text-sec:    #4b5563;
+  --tag-bg:      #ede9fe;
+  --tag-text:    #6d28d9;
+  --nav-bg:      #ffffff;
+  --vote-col:    #F6F7F8;
+  --input-bg:    #F6F7F8;
+  --hover-row:   #f5f3ff;
+  --scroll-thumb:#c4b5fd;
+}
+[data-theme="dark"] {
+  --bg:          #0d0d1a;
+  --card:        #13132a;
+  --border:      #252545;
+  --muted:       #7c7c9a;
+  --text:        #e8e8ff;
+  --text-sec:    #a0a0c8;
+  --tag-bg:      #1e1b4b;
+  --tag-text:    #a78bfa;
+  --nav-bg:      #0f0f22;
+  --vote-col:    #0a0a18;
+  --input-bg:    #0a0a18;
+  --hover-row:   #1a1a35;
+  --scroll-thumb:#4338ca;
+}
+
+/* ── BASE ── */
+* { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); transition: background .3s, color .3s; min-height: 100vh; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 3px; }
+
+/* ── NAV ── */
+nav.topnav {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  transition: background .3s, border-color .3s;
+  position: sticky; top: 0; z-index: 50;
+}
+.logo-icon { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.grad-text {
+  background: linear-gradient(135deg, #818cf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── THEME TOGGLE ── */
+#themeToggle {
+  position: relative; width: 46px; height: 24px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 99px; cursor: pointer; border: none; outline: none;
+  transition: background .3s; flex-shrink: 0;
+}
+#themeToggle::after {
+  content: ''; position: absolute; width: 18px; height: 18px;
+  background: #fff; border-radius: 50%; top: 3px; left: 3px;
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+[data-theme="dark"] #themeToggle::after { transform: translateX(22px); }
+#themeToggle .icon-sun  { position: absolute; top: 50%; transform: translateY(-50%); left:  5px; font-size: 10px; color: #fff; pointer-events: none; }
+#themeToggle .icon-moon { position: absolute; top: 50%; transform: translateY(-50%); right: 5px; font-size: 10px; color: #fff; pointer-events: none; }
+
+/* ── CARD BASE ── */
+.card-base {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: background .3s, border-color .15s, box-shadow .15s;
+}
+
+/* ── PROBLEM CARD: Reddit-style vote column ── */
+.post-card {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: background .3s, border-color .15s, box-shadow .15s;
+}
+.post-card:hover { border-color: #6366f1; box-shadow: 0 4px 20px rgba(99,102,241,.15); }
+
+/* ── VOTE COLUMN ── */
+.vote-col {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 12px 10px; gap: 4px;
+  background: var(--vote-col);
+  min-width: 52px;
+  transition: background .3s;
+}
+.vote-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 18px; padding: 4px;
+  border-radius: 4px; transition: color .15s, transform .15s, background .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.vote-btn:hover { transform: scale(1.2); }
+.vote-btn.up-active   { color: #FF4500; }
+.vote-btn.down-active { color: #7193ff; }
+.vote-count {
+  font-size: 12px; font-weight: 700; color: var(--text);
+  min-width: 28px; text-align: center; line-height: 1;
+}
+
+/* ── TOP COMMENT HIGHLIGHT ── */
+.top-comment {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 1px rgba(99,102,241,.3), 0 4px 20px rgba(99,102,241,.1) !important;
+}
+.top-badge {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 99px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* ── BUG REPORT HIGHLIGHT ── */
+.bug-marked { border-color: #EF4444 !important; }
+.bug-badge {
+  background: rgba(239,68,68,.15); color: #EF4444;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 99px;
+  border: 1px solid rgba(239,68,68,.3);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: #090918; border-radius: 10px;
+  border: 1px solid #252545; overflow: hidden;
+}
+.code-header {
+  background: #111128; border-bottom: 1px solid #252545;
+  padding: 8px 14px; display: flex; align-items: center;
+  justify-content: space-between;
+}
+.code-header span { font-size: 11px; color: #7c7c9a; font-family: 'JetBrains Mono', monospace; }
+.code-body { padding: 14px 16px; overflow-x: auto; }
+.code-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; line-height: 1.7;
+  color: #e8e8ff; margin: 0; white-space: pre;
+}
+/* Python syntax colours */
+.kw  { color: #c792ea; }   /* keywords */
+.fn  { color: #82aaff; }   /* function names */
+.cm  { color: #546e7a; font-style: italic; } /* comments */
+.st  { color: #c3e88d; }   /* strings */
+.nu  { color: #f78c6c; }   /* numbers */
+.op  { color: #89ddff; }   /* operators */
+.tp  { color: #ffcb6b; }   /* types / builtins */
+.var { color: #e8e8ff; }   /* variables */
+.dec { color: #f07178; }   /* decorator / self */
+
+/* ── ACTION BUTTONS (comment actions) ── */
+.act-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; padding: 4px 10px;
+  border-radius: 6px; border: none; cursor: pointer;
+  color: var(--muted); background: transparent;
+  transition: background .15s, color .15s;
+}
+.act-btn:hover { background: var(--hover-row); color: var(--text); }
+.act-btn.reported { color: #EF4444; background: rgba(239,68,68,.08); }
+.act-btn.bug-active { color: #EF4444; }
+.copy-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: #7c7c9a; font-size: 11px; padding: 2px 6px;
+  border-radius: 4px; transition: color .15s, background .15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.copy-btn:hover { color: #818cf8; background: rgba(129,140,248,.1); }
+
+/* ── TAGS ── */
+.tag { background: var(--tag-bg); color: var(--tag-text); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.diff-medium { background: rgba(245,158,11,.15); color: #F59E0B; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.diff-easy   { background: rgba(16,185,129,.15); color: #10B981; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+
+/* ── WRONG ANSWER STYLE ── */
+.wrong-comment .vote-col { background: rgba(239,68,68,.05); }
+
+/* ── SORT BAR ── */
+.sort-btn {
+  font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 6px; cursor: pointer; border: none;
+  background: transparent; color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.sort-btn:hover { background: var(--hover-row); color: var(--text); }
+.sort-btn.active { background: var(--tag-bg); color: #818cf8; }
+
+/* ── SIDEBAR ── */
+.sidebar-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.bell-btn { background: transparent; transition: background .15s; border-radius: 50%; border: none; cursor: pointer; padding: 6px; }
+.bell-btn:hover { background: var(--hover-row); }
+
+/* ── CONSTRAINT TABLE ── */
+.constraint-table { width: 100%; border-collapse: collapse; }
+.constraint-table td { padding: 6px 10px; font-size: 13px; color: var(--text-sec); border-bottom: 1px solid var(--border); }
+.constraint-table td:first-child { color: var(--muted); font-weight: 600; font-size: 12px; width: 45%; }
+.constraint-table tr:last-child td { border-bottom: none; }
+
+/* ── BACK TO FEED BUTTON ── */
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600;
+  padding: 5px 12px; border-radius: 8px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  text-decoration: none;
+  transition: color .15s, border-color .15s, background .15s, box-shadow .15s;
+  white-space: nowrap;
+}
+.nav-back:hover {
+  color: #818cf8;
+  border-color: #6366f1;
+  background: var(--tag-bg);
+  box-shadow: 0 0 0 2px rgba(99,102,241,.15);
+}
+
+/* ── MOBILE BOTTOM NAV ── */
+nav.bottomnav { background: var(--nav-bg); border-top: 1px solid var(--border); transition: background .3s, border-color .3s; }
+
+/* ── SEARCH INPUT ── */
+.search-input {
+  background: var(--input-bg); border: 1px solid var(--border);
+  color: var(--text); transition: all .3s;
+  outline: none; border-radius: 8px;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.2); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.comment-card { animation: fadeUp .4s ease both; }
+
+/* Staggered delays */
+.comment-card:nth-child(1) { animation-delay: .05s; }
+.comment-card:nth-child(2) { animation-delay: .12s; }
+.comment-card:nth-child(3) { animation-delay: .19s; }
+.comment-card:nth-child(4) { animation-delay: .26s; }
+.comment-card:nth-child(5) { animation-delay: .33s; }
+.comment-card:nth-child(6) { animation-delay: .40s; }
+
+/* ── PROBLEM BODY PROSE ── */
+.prose-sm { color: var(--text-sec); font-size: 14px; line-height: 1.75; }
+.prose-sm strong { color: var(--text); font-weight: 600; }
+.prose-sm code {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  background: var(--tag-bg); color: var(--tag-text);
+  padding: 1px 5px; border-radius: 4px;
+}
+.prose-sm ul { list-style: disc; padding-left: 20px; margin-top: 8px; }
+.prose-sm li { margin-bottom: 4px; }
+
+/* ── COMMUNITY BANNER ── */
+.community-banner {
+  background: linear-gradient(135deg, #4338ca 0%, #7c3aed 60%, #6d28d9 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+/* ── AVATAR CIRCLE ── */
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* Transition all theme-aware elements */
+.post-card, .card-base, .code-block, .act-btn, .sort-btn {
+  transition: background .3s, border-color .15s, color .3s, box-shadow .15s;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="topnav sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 h-12 flex items-center gap-3">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-2 min-w-max">
+      <img src="data:image/png;base64,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" class="w-8 h-8 rounded-lg shadow-lg shadow-indigo-500/30 object-cover" alt="CodeZ logo"/>
+      <span class="font-bold text-lg hidden sm:block text-t">Code<span class="grad-text">Z</span></span>
+    </div>
+
+    <!-- Search -->
+    <div class="flex-1 max-w-xl mx-2" onclick="location.href='{% url 'search' %}'" >
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-m text-sm"></i>
+        <input id="searchBar"  type="text" placeholder="Search for problems, languages, or users"
+          class="w-full pl-9 pr-4 py-1.5 rounded-full text-sm"/>
+      </div>
+    </div>
+
+    <!-- Nav right -->
+    <div class="flex items-center gap-2 ml-auto">
+
+      <!-- Dark Mode Toggle -->
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <i class="icon-sun fa-solid fa-sun"></i>
+          <i class="icon-moon fa-solid fa-moon"></i>
+        </button>
+      </div>
+
+      <!-- Premium Button -->
+      <button class="hidden sm:flex items-center gap-1.5 bg-premium text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity relative shadow-md shadow-orange-500/20">
+        <i class="fa-solid fa-crown text-xs"></i>
+        Premium
+        <span class="absolute -top-2 -right-2 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap">College Discount</span>
+      </button>
+
+      <!-- Create Post -->
+      <button class="hidden sm:flex items-center gap-1 create-btn text-xs font-medium px-3 py-1.5 rounded-full">
+        <i class="fa-solid fa-plus text-xs"></i>
+        Create
+      </button>
+
+      <!-- Leaderboard Link -->
+      <a href="{% url 'leaderboard' %}" class="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors hover:bg-indigo-500/10 hover:text-indigo-400" style="color:var(--muted); text-decoration:none;">
+        <i class="fa-solid fa-trophy"></i>
+        <span>Leaderboard</span>
+      </a>
+      <!-- Settings Link -->
+      <a href="{% url 'settings' %}" class="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors hover:bg-indigo-500/10 hover:text-indigo-400" style="color:var(--muted); text-decoration:none;">
+        <i class="fa-solid fa-gear"></i>
+        <span>Settings</span>
+      </a>
+      <!-- Notifications -->
+      <div class="relative cursor-pointer p-2 bell-btn">
+        <i class="fa-regular fa-bell bell-icon text-base"></i>
+        <span class="notif-dot absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2" style="border-color:var(--nav-bg)"></span>
+      </div>
+
+      <!-- Avatar -->
+      <a href="{% url 'my_profile' %}" style="cursor: pointer; border: 1px solid #4f46e5; text-decoration:none;" class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold cursor-pointer shadow-md shadow-indigo-500/30">
+        {{ request.user.username|slice:':2'|upper }}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<div class="max-w-6xl mx-auto px-4 pt-4 pb-1">
+  <nav class="flex items-center gap-1.5 text-xs" style="color:var(--muted)">
+    <a href="{% url 'home' %}" class="hover:text-indigo-400 transition-colors">Home</a>
+    <i class="fa fa-chevron-right text-[9px]"></i>
+    <a href="#" class="hover:text-indigo-400 transition-colors">c/SolveIt</a>
+    <i class="fa fa-chevron-right text-[9px]"></i>
+    <span style="color:var(--text-sec)">{% if question %}{{ question.title }}{% else %}Reverse a Linked List in Python{% endif %}</span>
+  </nav>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-4 flex gap-5 items-start">
+
+  <!-- ══════════════════════════════════════
+       LEFT: FEED COLUMN
+  ══════════════════════════════════════ -->
+  <main class="flex-1 min-w-0 flex flex-col gap-4">
+
+    <!-- ─── PROBLEM POST CARD ─── -->
+    <article class="post-card" id="problem-post">
+      <!-- Vote column -->
+      <div class="vote-col" id="post-votes">
+        <button class="vote-btn" onclick="vote('post','up')" id="post-up" aria-label="Upvote problem">
+          <i class="fa fa-arrow-up"></i>
+        </button>
+        <span class="vote-count" id="post-count">847</span>
+        <button class="vote-btn" onclick="vote('post','down')" id="post-down" aria-label="Downvote problem">
+          <i class="fa fa-arrow-down"></i>
+        </button>
+      </div>
+
+      <!-- Post body -->
+      <div class="flex-1 p-4 min-w-0">
+        <!-- Meta row -->
+        <div class="flex items-center gap-2 flex-wrap mb-2" style="font-size:12px;color:var(--muted)">
+          <span class="font-semibold" style="color:#818cf8">c/SolveIt</span>
+          <span>•</span>
+          <span>Posted by <strong style="color:var(--text-sec)">u/code_master42</strong></span>
+          <span>•</span>
+          <span>3 hours ago</span>
+          <span>•</span>
+          <span><i class="fa fa-eye mr-1"></i>4,219 views</span>
+        </div>
+
+        <!-- Title + badges -->
+        <h1 class="text-lg font-bold mb-2" style="color:var(--text);line-height:1.3">
+          Reverse a Linked List in Python
+        </h1>
+        <div class="flex items-center gap-2 flex-wrap mb-4">
+          <span class="diff-medium">Medium</span>
+          <span class="tag"><i class="fa fa-link mr-1" style="font-size:9px"></i>Linked List</span>
+          <span class="tag">Data Structures</span>
+          <span class="tag">Iterative</span>
+        </div>
+
+        <!-- ── PROBLEM DESCRIPTION ── -->
+        <div class="prose-sm">
+          <p>
+            Given the head of a singly linked list, reverse the list and return the reversed list. 
+            You must do this iteratively using <strong>O(1)</strong> extra space. 
+            The list can contain up to <strong>10⁵ nodes</strong>, with each node’s value ranging from <strong>-5000</strong> to <strong>5000</strong>.
+          </p>
+
+          <!-- Function signature -->
+          <div class="code-block mt-4 mb-4">
+            <div class="code-header">
+              <span>python — function signature</span>
+            </div>
+            <div class="code-body">
+<pre><span class="cm"># Definition of a singly-linked list node</span>
+<span class="kw">class</span> <span class="tp">ListNode</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="dec">self</span>, val<span class="op">=</span><span class="nu">0</span>, next<span class="op">=None</span>):
+        <span class="dec">self</span>.val  <span class="op">=</span> val
+        <span class="dec">self</span>.next <span class="op">=</span> next
+
+<span class="kw">class</span> <span class="tp">Solution</span>:
+    <span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head: <span class="tp">Optional</span>[<span class="tp">ListNode</span>]) <span class="op">-></span> <span class="tp">Optional</span>[<span class="tp">ListNode</span>]:
+        <span class="cm"># Your solution here</span>
+        <span class="op">...</span></pre>
+            </div>
+          </div>
+
+          <!-- Examples -->
+          <p><strong>Example 1</strong></p>
+          <div class="code-block mb-4">
+            <div class="code-header"><span>example</span></div>
+            <div class="code-body">
+<pre><span class="cm">Input :</span>  <span class="var">head</span> <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>]
+<span class="cm">Output:</span>  [<span class="nu">5</span>, <span class="nu">4</span>, <span class="nu">3</span>, <span class="nu">2</span>, <span class="nu">1</span>]</pre>
+            </div>
+          </div>
+
+          <p><strong>Example 2</strong></p>
+          <div class="code-block mb-4">
+            <div class="code-header"><span>example</span></div>
+            <div class="code-body">
+<pre><span class="cm">Input :</span>  <span class="var">head</span> <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>]
+<span class="cm">Output:</span>  [<span class="nu">2</span>, <span class="nu">1</span>]</pre>
+            </div>
+          </div>
+
+
+        <!-- Post actions -->
+        <div class="flex items-center gap-1 mt-4 flex-wrap">
+          <button class="act-btn"><i class="fa fa-comment-dots mr-1"></i>84 Comments</button>
+          <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          <button class="act-btn"><i class="fa fa-bookmark mr-1"></i>Save</button>
+          <button class="act-btn"><i class="fa fa-trophy mr-1"></i>Award</button>
+        </div>
+      </div>
+    </article>
+
+
+    <!-- ─── COMMENT SORT BAR ─── -->
+    <div class="card-base px-4 py-2.5 flex items-center gap-2 flex-wrap">
+      <span class="text-xs font-semibold mr-1" style="color:var(--muted)">SORT BY</span>
+      <button class="sort-btn active" data-sort="top" onclick="setSort(this,'top')">
+        <i class="fa fa-fire-flame-curved mr-1"></i>Top
+      </button>
+      <button class="sort-btn" data-sort="new" onclick="setSort(this,'new')">
+        <i class="fa fa-clock mr-1"></i>New
+      </button>
+      <button class="sort-btn" data-sort="controversial" onclick="setSort(this,'ctrl')">
+        <i class="fa fa-bolt mr-1"></i>Controversial
+      </button>
+      <div class="ml-auto flex items-center gap-2">
+        <span class="text-xs" style="color:var(--muted)">84 comments</span>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════
+         COMMENT SECTION
+    ════════════════════════════════════════ -->
+    <section id="comment-list" class="flex flex-col gap-3">
+
+      <!-- ───────────────────────────────────
+           COMMENT 1: TOP — Optimized O(n)/O(1)
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card top-comment" id="c1" data-votes="312">
+        <div class="vote-col" id="c1-vcol">
+          <button class="vote-btn" onclick="vote('c1','up')" id="c1-up" aria-label="Upvote"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c1-count">312</span>
+          <button class="vote-btn" onclick="vote('c1','down')" id="c1-down" aria-label="Downvote"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <!-- Header -->
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:11px">AL</div>
+            <span class="font-semibold text-sm" style="color:var(--text)">u/algo_legend</span>
+            <span class="top-badge"><i class="fa fa-crown" style="font-size:9px"></i> Top Answer</span>
+            <span class="text-xs ml-1" style="color:var(--muted)">2 hours ago</span>
+          </div>
+
+          <p class="prose-sm mb-3">
+            Classic three-pointer iterative approach. Walk the list once, reversing each <code>next</code>
+            pointer as you go. <strong>O(n) time, O(1) space</strong> — exactly what the problem asks for.
+            The key insight: always save <code>curr.next</code> <em>before</em> you clobber the pointer.
+          </p>
+
+          <!-- Code block -->
+          <div class="code-block mb-3">
+            <div class="code-header">
+              <span>python · reverseList — O(n) / O(1)</span>
+              <button class="copy-btn" onclick="copyCode(this,'code1')"><i class="fa fa-copy mr-1"></i>Copy</button>
+            </div>
+            <div class="code-body" id="code1-raw">
+<pre><span class="kw">class</span> <span class="tp">Solution</span>:
+    <span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head: <span class="tp">Optional</span>[<span class="tp">ListNode</span>]) <span class="op">-></span> <span class="tp">Optional</span>[<span class="tp">ListNode</span>]:
+        prev <span class="op">=</span> <span class="tp">None</span>
+        curr <span class="op">=</span> head
+
+        <span class="kw">while</span> curr:
+            next_node <span class="op">=</span> curr.next   <span class="cm"># ① save next before breaking the link</span>
+            curr.next  <span class="op">=</span> prev        <span class="cm"># ② reverse the pointer</span>
+            prev       <span class="op">=</span> curr        <span class="cm"># ③ advance prev</span>
+            curr       <span class="op">=</span> next_node   <span class="cm"># ④ advance curr</span>
+
+        <span class="kw">return</span> prev  <span class="cm"># prev is now the new head</span></pre>
+            </div>
+          </div>
+
+          <div class="prose-sm mb-3">
+            <strong>Walkthrough on [1→2→3→4→5]:</strong>
+            <ul>
+              <li>Start: <code>prev=None, curr=1</code></li>
+              <li>Step 1: save <code>2</code>, set <code>1.next=None</code>, advance → <code>prev=1, curr=2</code></li>
+              <li>Step 2: save <code>3</code>, set <code>2.next=1</code>, advance → <code>prev=2, curr=3</code></li>
+              <li>…and so on until <code>curr=None</code></li>
+              <li>Return <code>prev</code> = node <code>5</code> (new head) ✅</li>
+            </ul>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn" onclick="markBug(this,'c1')"><i class="fa fa-bug mr-1"></i>Mark as Bug</button>
+            <button class="act-btn" onclick="reportComment(this,'c1')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+
+      <!-- ───────────────────────────────────
+           COMMENT 2: Short clever answer
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card" id="c2" data-votes="178">
+        <div class="vote-col" id="c2-vcol">
+          <button class="vote-btn" onclick="vote('c2','up')" id="c2-up"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c2-count">178</span>
+          <button class="vote-btn" onclick="vote('c2','down')" id="c2-down"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:linear-gradient(135deg,#10B981,#06b6d4);color:#fff;font-size:11px">PP</div>
+            <span class="font-semibold text-sm" style="color:var(--text)">u/python_purist</span>
+            <span class="tag" style="font-size:10px">⚡ Clever</span>
+            <span class="text-xs ml-1" style="color:var(--muted)">1 hour ago</span>
+          </div>
+
+          <p class="prose-sm mb-3">
+            If you love Python one-liners, here's a cheeky two-liner. Same O(n)/O(1) complexity — just
+            uses multiple assignment to eliminate the temp variable. Readable once you know the trick.
+          </p>
+
+          <div class="code-block mb-3">
+            <div class="code-header">
+              <span>python · two-liner</span>
+              <button class="copy-btn" onclick="copyCode(this,'code2')"><i class="fa fa-copy mr-1"></i>Copy</button>
+            </div>
+            <div class="code-body" id="code2-raw">
+<pre><span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head):
+    prev, curr <span class="op">=</span> <span class="tp">None</span>, head
+    <span class="kw">while</span> curr:
+        prev, curr.next, curr <span class="op">=</span> curr, prev, curr.next
+    <span class="kw">return</span> prev</pre>
+            </div>
+          </div>
+
+          <p class="prose-sm mb-3">
+            Python evaluates the right-hand side <em>entirely</em> before assignment, so
+            <code>curr.next</code> is safely captured in the tuple before any pointer is mutated. 🐍
+          </p>
+
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn" onclick="markBug(this,'c2')"><i class="fa fa-bug mr-1"></i>Mark as Bug</button>
+            <button class="act-btn" onclick="reportComment(this,'c2')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+
+      <!-- ───────────────────────────────────
+           COMMENT 3: Medium — slightly inefficient
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card" id="c3" data-votes="94">
+        <div class="vote-col" id="c3-vcol">
+          <button class="vote-btn" onclick="vote('c3','up')" id="c3-up"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c3-count">94</span>
+          <button class="vote-btn" onclick="vote('c3','down')" id="c3-down"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:linear-gradient(135deg,#F59E0B,#f97316);color:#fff;font-size:11px">MK</div>
+            <span class="font-semibold text-sm" style="color:var(--text)">u/mid_knight_coder</span>
+            <span class="text-xs ml-1" style="color:var(--muted)">55 minutes ago</span>
+          </div>
+
+          <p class="prose-sm mb-3">
+            Here's my approach — collect values into a list, rebuild the linked list in reverse.
+            It's <strong>O(n) time but O(n) space</strong> (uses extra memory for the values array),
+            so it doesn't meet the O(1) constraint. Good for understanding the structure though!
+          </p>
+
+          <div class="code-block mb-3">
+            <div class="code-header">
+              <span>python · O(n) space — does NOT meet constraints</span>
+              <button class="copy-btn" onclick="copyCode(this,'code3')"><i class="fa fa-copy mr-1"></i>Copy</button>
+            </div>
+            <div class="code-body" id="code3-raw">
+<pre><span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head):
+    vals <span class="op">=</span> []
+    curr <span class="op">=</span> head
+    <span class="kw">while</span> curr:
+        vals.append(curr.val)
+        curr <span class="op">=</span> curr.next
+
+    curr <span class="op">=</span> head
+    <span class="kw">for</span> v <span class="kw">in</span> reversed(vals):
+        curr.val <span class="op">=</span> v
+        curr <span class="op">=</span> curr.next
+
+    <span class="kw">return</span> head</pre>
+            </div>
+          </div>
+
+          <p class="prose-sm mb-3" style="color:#F59E0B">
+            ⚠️ Note: this mutates <em>values</em> rather than reversing actual node pointers.
+            Technically produces correct output but uses O(n) extra memory — violates the space constraint.
+            Use <strong>u/algo_legend</strong>'s pointer-reversal approach for a proper O(1) solution.
+          </p>
+
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn" onclick="markBug(this,'c3')"><i class="fa fa-bug mr-1"></i>Mark as Bug</button>
+            <button class="act-btn" onclick="reportComment(this,'c3')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+
+      <!-- ───────────────────────────────────
+           COMMENT 4: Beginner — verbose but correct
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card" id="c4" data-votes="57">
+        <div class="vote-col" id="c4-vcol">
+          <button class="vote-btn" onclick="vote('c4','up')" id="c4-up"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c4-count">57</span>
+          <button class="vote-btn" onclick="vote('c4','down')" id="c4-down"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:11px">NK</div>
+            <span class="font-semibold text-sm" style="color:var(--text)">u/new_kid_on_code</span>
+            <span class="tag" style="background:rgba(16,185,129,.12);color:#10B981;font-size:10px">🌱 Beginner</span>
+            <span class="text-xs ml-1" style="color:var(--muted)">40 minutes ago</span>
+          </div>
+
+          <p class="prose-sm mb-3">
+            Hey everyone! First time solving linked list problems. I wrote it step-by-step with lots of
+            comments so I can understand each part. It passes all test cases! 🎉 Any feedback welcome.
+          </p>
+
+          <div class="code-block mb-3">
+            <div class="code-header">
+              <span>python · verbose but correct (O(n)/O(1))</span>
+              <button class="copy-btn" onclick="copyCode(this,'code4')"><i class="fa fa-copy mr-1"></i>Copy</button>
+            </div>
+            <div class="code-body" id="code4-raw">
+<pre><span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head):
+    <span class="cm"># Handle edge case: empty list or single node</span>
+    <span class="kw">if</span> head <span class="kw">is</span> <span class="tp">None</span>:
+        <span class="kw">return</span> <span class="tp">None</span>
+    <span class="kw">if</span> head.next <span class="kw">is</span> <span class="tp">None</span>:
+        <span class="kw">return</span> head
+
+    <span class="cm"># Initialize our three pointers</span>
+    previous_node <span class="op">=</span> <span class="tp">None</span>
+    current_node  <span class="op">=</span> head
+    next_node     <span class="op">=</span> <span class="tp">None</span>
+
+    <span class="cm"># Traverse the entire list</span>
+    <span class="kw">while</span> current_node <span class="kw">is</span> <span class="kw">not</span> <span class="tp">None</span>:
+
+        <span class="cm"># Step 1: Save the reference to the next node</span>
+        next_node <span class="op">=</span> current_node.next
+
+        <span class="cm"># Step 2: Reverse the current node's pointer</span>
+        current_node.next <span class="op">=</span> previous_node
+
+        <span class="cm"># Step 3: Move previous pointer one step forward</span>
+        previous_node <span class="op">=</span> current_node
+
+        <span class="cm"># Step 4: Move current pointer one step forward</span>
+        current_node <span class="op">=</span> next_node
+
+    <span class="cm"># previous_node is now pointing to the new head</span>
+    new_head <span class="op">=</span> previous_node
+    <span class="kw">return</span> new_head</pre>
+            </div>
+          </div>
+
+          <p class="prose-sm mb-3">
+            The logic is identical to the top answer — just more explicit variable names and comments.
+            Great if you're learning! The two early-return edge cases aren't strictly needed
+            (the while loop handles them naturally) but they make intent clearer.
+          </p>
+
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn" onclick="markBug(this,'c4')"><i class="fa fa-bug mr-1"></i>Mark as Bug</button>
+            <button class="act-btn" onclick="reportComment(this,'c4')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+
+      <!-- ───────────────────────────────────
+           COMMENT 5: Bug report on a wrong answer
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card" id="c5" data-votes="41">
+        <div class="vote-col" id="c5-vcol">
+          <button class="vote-btn" onclick="vote('c5','up')" id="c5-up"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c5-count">41</span>
+          <button class="vote-btn" onclick="vote('c5','down')" id="c5-down"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;font-size:11px">DB</div>
+            <span class="font-semibold text-sm" style="color:var(--text)">u/debugger_dan</span>
+            <span class="bug-badge"><i class="fa fa-bug" style="font-size:9px"></i> Bug Report</span>
+            <span class="text-xs ml-1" style="color:var(--muted)">28 minutes ago</span>
+          </div>
+
+          <p class="prose-sm mb-3">
+            Replying to <strong style="color:#818cf8">u/wrong_way_wren</strong> — your solution below has a
+            critical bug: you're updating <code>curr</code> <em>before</em> saving <code>curr.next</code>,
+            which means you lose the reference to the rest of the list. Here's a minimal failing case:
+          </p>
+
+          <div class="code-block mb-3" style="border-color:rgba(239,68,68,.3)">
+            <div class="code-header" style="background:#1a0a0a;border-color:rgba(239,68,68,.2)">
+              <span style="color:#f87171">python · reproducing the crash</span>
+            </div>
+            <div class="code-body">
+<pre><span class="cm"># Input: [1, 2, 3]</span>
+<span class="cm"># With wrong_way_wren's code:</span>
+
+prev, curr <span class="op">=</span> <span class="tp">None</span>, head          <span class="cm"># curr = node(1)</span>
+<span class="kw">while</span> curr:
+    curr       <span class="op">=</span> curr.next        <span class="cm"># ❌ curr is now node(2) — node(1) is LOST</span>
+    curr.next  <span class="op">=</span> prev             <span class="cm"># ❌ sets node(2).next = None (wrong!)</span>
+    prev       <span class="op">=</span> curr             <span class="cm"># prev = node(2)</span>
+
+<span class="cm"># Result: [2] — only returns one node, rest discarded!</span>
+<span class="cm"># Fix: save curr.next BEFORE advancing curr</span></pre>
+            </div>
+          </div>
+
+          <p class="prose-sm mb-3">
+            The fix is simple: add <code>next_node = curr.next</code> as the <em>first</em>
+            line inside the loop, then advance with <code>curr = next_node</code> at the end.
+            Order of operations matters a lot with pointer manipulation!
+          </p>
+
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn" onclick="markBug(this,'c5')"><i class="fa fa-bug mr-1"></i>Mark as Bug</button>
+            <button class="act-btn" onclick="reportComment(this,'c5')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+
+      <!-- ───────────────────────────────────
+           COMMENT 6: Wrong answer (low votes)
+      ─────────────────────────────────────── -->
+      <article class="post-card comment-card wrong-comment" id="c6" data-votes="-18">
+        <div class="vote-col" id="c6-vcol" style="background:rgba(239,68,68,.05)">
+          <button class="vote-btn" onclick="vote('c6','up')" id="c6-up"><i class="fa fa-arrow-up"></i></button>
+          <span class="vote-count" id="c6-count" style="color:#ef4444">-18</span>
+          <button class="vote-btn" onclick="vote('c6','down')" id="c6-down"><i class="fa fa-arrow-down"></i></button>
+        </div>
+        <div class="flex-1 p-4 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-3">
+            <div class="avatar" style="background:#374151;color:#9ca3af;font-size:11px">WW</div>
+            <span class="font-semibold text-sm" style="color:var(--muted)">u/wrong_way_wren</span>
+            <span style="background:rgba(239,68,68,.12);color:#f87171;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;">
+              ❌ Wrong Answer
+            </span>
+            <span class="text-xs ml-1" style="color:var(--muted)">20 minutes ago</span>
+          </div>
+
+          <p class="prose-sm mb-3" style="color:var(--muted)">
+            I think this should work? It reverses the list by walking through it…
+          </p>
+
+          <div class="code-block mb-3" style="border-color:rgba(239,68,68,.3)">
+            <div class="code-header" style="background:#1a0a0a;border-color:rgba(239,68,68,.2)">
+              <span style="color:#f87171">python · ❌ BUGGY — do not use</span>
+              <button class="copy-btn" onclick="copyCode(this,'code6')"><i class="fa fa-copy mr-1"></i>Copy</button>
+            </div>
+            <div class="code-body" id="code6-raw">
+<pre><span class="kw">def</span> <span class="fn">reverseList</span>(<span class="dec">self</span>, head):
+    prev <span class="op">=</span> <span class="tp">None</span>
+    curr <span class="op">=</span> head
+    <span class="kw">while</span> curr:
+        curr      <span class="op">=</span> curr.next   <span class="cm"># ❌ BUG: advances curr BEFORE saving next</span>
+        curr.next <span class="op">=</span> prev        <span class="cm"># ❌ BUG: now curr already moved forward!</span>
+        prev      <span class="op">=</span> curr
+    <span class="kw">return</span> prev</pre>
+            </div>
+          </div>
+
+          <p class="prose-sm mb-1" style="color:#f87171;font-size:13px">
+            🐛 <strong>Bug identified by u/debugger_dan</strong> — advancing <code>curr</code> before saving
+            the next reference causes data loss. Also crashes on empty input since <code>curr.next</code>
+            after <code>curr = curr.next</code> could be <code>None</code>.
+          </p>
+
+          <div class="flex items-center gap-1 flex-wrap mt-3">
+            <button class="act-btn"><i class="fa fa-reply mr-1"></i>Reply</button>
+            <button class="act-btn bug-active" onclick="markBug(this,'c6')"><i class="fa fa-bug mr-1"></i>Bug Marked</button>
+            <button class="act-btn" onclick="reportComment(this,'c6')"><i class="fa fa-flag mr-1"></i>Report</button>
+            <button class="act-btn"><i class="fa fa-share mr-1"></i>Share</button>
+          </div>
+        </div>
+      </article>
+
+    </section>
+    <!-- end #comment-list -->
+
+
+    <!-- ─── LOAD MORE ─── -->
+    <button class="w-full py-3 rounded-xl text-sm font-semibold transition-all"
+            style="border:1px solid var(--border);background:var(--card);color:#818cf8"
+            onmouseover="this.style.background='var(--tag-bg)'"
+            onmouseout="this.style.background='var(--card)'"
+            onclick="this.textContent='Loading…'">
+      Load more comments (78)
+    </button>
+
+    <!-- ─── BOTTOM SPACER (mobile nav clearance) ─── -->
+    <div class="h-16 lg:hidden"></div>
+  
+<!-- ══════════════════════════════════════════════════════
+     SUBMIT ANSWER FORM (only shown when question loaded from DB)
+══════════════════════════════════════════════════════════ -->
+{% if question and question.id %}
+<div class="card-base p-4 mb-2">
+  <h3 class="text-sm font-bold text-t mb-3 flex items-center gap-2">
+    <i class="fa-solid fa-pen-to-square text-indigo-400"></i> Post Your Answer
+  </h3>
+  <form method="POST" action="{% url 'submit_answer' question.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="text-xs font-semibold mb-1.5 block" style="color:var(--muted)">EXPLANATION</label>
+      <textarea name="body" rows="3" placeholder="Explain your approach…"
+        style="width:100%;background:var(--input-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 12px;font-size:13px;outline:none;resize:vertical;"
+        onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 2px rgba(99,102,241,.2)'"
+        onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="text-xs font-semibold mb-1.5 block" style="color:var(--muted)">CODE (optional)</label>
+      <textarea name="code" rows="6" placeholder="# Paste your code here…"
+        style="width:100%;background:#090918;border:1px solid #252545;color:#e8e8ff;border-radius:8px;padding:9px 12px;font-size:12.5px;font-family:'JetBrains Mono',monospace;outline:none;resize:vertical;"
+        onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#252545'"></textarea>
+    </div>
+    <div class="flex items-center justify-between gap-3">
+      <select name="language" style="background:var(--input-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+        <option value="go">Go</option>
+        <option value="rust">Rust</option>
+      </select>
+      <button type="submit"
+        style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:13px;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;"
+        onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+        <i class="fa-solid fa-paper-plane"></i> Submit Answer
+      </button>
+    </div>
+  </form>
+</div>
+{% endif %}
+
+<!-- Django messages (answer submit feedback) -->
+{% if messages %}
+<div class="fixed top-16 right-4 z-50 flex flex-col gap-2" id="msgContainer">
+  {% for message in messages %}
+  <div class="px-4 py-3 rounded-xl text-sm font-semibold text-white shadow-xl flex items-center gap-2"
+       style="background:{% if message.tags == 'error' %}linear-gradient(135deg,#EF4444,#dc2626){% else %}linear-gradient(135deg,#6366f1,#8b5cf6){% endif %}">
+    <i class="fa-solid {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+<script>setTimeout(()=>{const c=document.getElementById('msgContainer');if(c){c.style.transition='opacity .5s';c.style.opacity='0';setTimeout(()=>c.remove(),500);}}, 3000);</script>
+{% endif %}
+
+</main>
+
+
+  <!-- ══════════════════════════════════════
+       RIGHT SIDEBAR
+  ══════════════════════════════════════ -->
+  <aside class="hidden lg:flex flex-col gap-4 w-80 flex-shrink-0 sticky top-16">
+
+    <!-- Community card -->
+    <div class="card-base overflow-hidden">
+      <div class="community-banner px-4 pt-4 pb-8">
+        <span class="text-white font-bold text-base">c/SolveIt</span>
+        <p class="text-white/70 text-xs mt-1">Algorithmic problem solving & code reviews</p>
+      </div>
+      <div class="-mt-4 mx-4 mb-4 p-3 rounded-xl" style="background:var(--card);border:1px solid var(--border)">
+        <div class="flex justify-between mb-3">
+          <div>
+            <div class="font-bold text-sm" style="color:var(--text)">84.2k</div>
+            <div class="text-xs" style="color:var(--muted)">Members</div>
+          </div>
+          <div>
+            <div class="font-bold text-sm" style="color:var(--text)">1,247</div>
+            <div class="text-xs" style="color:var(--muted)">Online</div>
+          </div>
+          <div>
+            <div class="font-bold text-sm" style="color:#10B981">Active</div>
+            <div class="text-xs" style="color:var(--muted)">Status</div>
+          </div>
+        </div>
+        <button class="w-full py-2 rounded-lg text-sm font-bold text-white"
+                style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+          Join Community
+        </button>
+      </div>
+      <div class="px-4 pb-4 text-xs" style="color:var(--muted)">
+        Created by <span style="color:#818cf8">u/code_master42</span> · 
+        <a href="#" style="color:#818cf8">Community Rules</a>
+      </div>
+    </div>
+
+    <!-- Problem stats -->
+    <div class="card-base p-4">
+      <div class="sidebar-label mb-3">Problem Stats</div>
+      <div class="flex flex-col gap-2.5">
+        <div class="flex justify-between items-center">
+          <span class="text-sm" style="color:var(--text-sec)">Acceptance Rate</span>
+          <span class="font-bold text-sm" style="color:#10B981">63.4%</span>
+        </div>
+        <div style="background:var(--border);height:4px;border-radius:99px;overflow:hidden">
+          <div style="width:63.4%;height:100%;background:#10B981;border-radius:99px"></div>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+          <span class="text-sm" style="color:var(--text-sec)">Difficulty</span>
+          <span class="diff-medium">Medium</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-sm" style="color:var(--text-sec)">Total Submissions</span>
+          <span class="font-bold text-sm" style="color:var(--text)">2.1M</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-sm" style="color:var(--text-sec)">Accepted</span>
+          <span class="font-bold text-sm" style="color:var(--text)">1.33M</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related problems -->
+    <div class="card-base p-4">
+      <div class="sidebar-label mb-3">Related Problems</div>
+      <div class="flex flex-col gap-2">
+        <a href="#" class="flex items-center justify-between py-2 px-3 rounded-lg transition-colors"
+           style="border:1px solid var(--border)"
+           onmouseover="this.style.borderColor='#6366f1'"
+           onmouseout="this.style.borderColor='var(--border)'">
+          <span class="text-sm font-medium" style="color:var(--text)">Reverse Linked List II</span>
+          <span class="diff-medium" style="font-size:10px">Medium</span>
+        </a>
+        <a href="#" class="flex items-center justify-between py-2 px-3 rounded-lg transition-colors"
+           style="border:1px solid var(--border)"
+           onmouseover="this.style.borderColor='#6366f1'"
+           onmouseout="this.style.borderColor='var(--border)'">
+          <span class="text-sm font-medium" style="color:var(--text)">Palindrome Linked List</span>
+          <span class="diff-easy" style="font-size:10px">Easy</span>
+        </a>
+        <a href="#" class="flex items-center justify-between py-2 px-3 rounded-lg transition-colors"
+           style="border:1px solid var(--border)"
+           onmouseover="this.style.borderColor='#6366f1'"
+           onmouseout="this.style.borderColor='var(--border)'">
+          <span class="text-sm font-medium" style="color:var(--text)">Merge Two Sorted Lists</span>
+          <span class="diff-easy" style="font-size:10px">Easy</span>
+        </a>
+        <a href="#" class="flex items-center justify-between py-2 px-3 rounded-lg transition-colors"
+           style="border:1px solid var(--border)"
+           onmouseover="this.style.borderColor='#6366f1'"
+           onmouseout="this.style.borderColor='var(--border)'">
+          <span class="text-sm font-medium" style="color:var(--text)">Rotate List</span>
+          <span class="diff-medium" style="font-size:10px">Medium</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tags / Topics -->
+    <div class="card-base p-4">
+      <div class="sidebar-label mb-3">Topics</div>
+      <div class="flex flex-wrap gap-2">
+        <span class="tag">Linked List</span>
+        <span class="tag">Two Pointers</span>
+        <span class="tag">Data Structures</span>
+        <span class="tag">Iterative</span>
+        <span class="tag">Pointer Manipulation</span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MOBILE BOTTOM NAV
+══════════════════════════════════════════════════════════ -->
+
+
+
+<!-- ═══════════════════════════════════════════════════════
+     TOAST NOTIFICATION
+══════════════════════════════════════════════════════════ -->
+<div id="toast"
+     style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+            background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+            padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;
+            opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:999;
+            white-space:nowrap;box-shadow:0 4px 20px rgba(99,102,241,.4)">
+  ✓ Copied!
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT — Interactions & Ranking Logic
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────────────────────
+   THEME TOGGLE
+───────────────────────────────────────────────────────── */
+(function () {
+  var html  = document.documentElement;
+  var btn   = document.getElementById('themeToggle');
+  var saved = localStorage.getItem('codez-theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+
+  btn.addEventListener('click', function () {
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('codez-theme', next);
+  });
+})();
+
+
+/* ─────────────────────────────────────────────────────────
+   VOTE STATE
+   Tracks upvoted / downvoted state per post/comment ID.
+───────────────────────────────────────────────────────── */
+var voteState = {};  // { 'c1': 'up' | 'down' | null }
+
+function vote(id, dir) {
+  var countEl = document.getElementById(id + '-count');
+  var upBtn   = document.getElementById(id + '-up');
+  var downBtn = document.getElementById(id + '-down');
+
+  if (!countEl) return;
+
+  var current  = parseInt(countEl.textContent, 10);
+  var previous = voteState[id] || null;
+
+  // Remove previous highlights
+  upBtn.classList.remove('up-active');
+  downBtn.classList.remove('down-active');
+
+  if (previous === dir) {
+    // Toggle off: undo the vote
+    countEl.textContent = current + (dir === 'up' ? -1 : 1);
+    voteState[id] = null;
+  } else {
+    // Switch or new vote
+    var delta = 0;
+    if (previous === 'up')   delta -= 1;  // undo previous upvote
+    if (previous === 'down') delta += 1;  // undo previous downvote
+    delta += (dir === 'up' ? 1 : -1);    // apply new vote
+
+    countEl.textContent = current + delta;
+    voteState[id] = dir;
+
+    if (dir === 'up')   upBtn.classList.add('up-active');
+    else                downBtn.classList.add('down-active');
+  }
+
+  // Color negative counts red
+  if (parseInt(countEl.textContent, 10) < 0) {
+    countEl.style.color = '#ef4444';
+  } else {
+    countEl.style.color = '';
+  }
+
+  // Re-rank comments after every vote
+  rankComments();
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   RANKING LOGIC
+   Reads current vote counts and sorts comment cards by score.
+───────────────────────────────────────────────────────── */
+function rankComments() {
+  var list = document.getElementById('comment-list');
+  if (!list) return;
+
+  var cards = Array.prototype.slice.call(list.querySelectorAll('article.comment-card'));
+
+  cards.sort(function (a, b) {
+    var aId    = a.id;
+    var bId    = b.id;
+    var aCount = parseInt(document.getElementById(aId + '-count').textContent, 10);
+    var bCount = parseInt(document.getElementById(bId + '-count').textContent, 10);
+    return bCount - aCount;
+  });
+
+  // Re-append in sorted order
+  cards.forEach(function (card) { list.appendChild(card); });
+
+  // Highlight the top-voted comment
+  highlightTop(cards);
+}
+
+function highlightTop(cards) {
+  cards.forEach(function (card) { card.classList.remove('top-comment'); });
+
+  if (cards.length === 0) return;
+  // First card after sort = highest votes
+  var topCard = cards[0];
+  var topScore = parseInt(
+    document.getElementById(topCard.id + '-count').textContent, 10
+  );
+  // Only highlight if score is positive
+  if (topScore > 0) {
+    topCard.classList.add('top-comment');
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   MARK AS BUG
+───────────────────────────────────────────────────────── */
+function markBug(btn, id) {
+  var card = document.getElementById(id);
+  if (!card) return;
+
+  var isBugged = card.classList.toggle('bug-marked');
+  btn.classList.toggle('bug-active', isBugged);
+  btn.innerHTML = isBugged
+    ? '<i class="fa fa-bug mr-1"></i>Bug Marked'
+    : '<i class="fa fa-bug mr-1"></i>Mark as Bug';
+
+  showToast(isBugged ? '🐛 Marked as Bug' : 'Bug mark removed');
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   REPORT COMMENT
+───────────────────────────────────────────────────────── */
+function reportComment(btn, id) {
+  btn.classList.toggle('reported');
+  var isReported = btn.classList.contains('reported');
+  btn.innerHTML = isReported
+    ? '<i class="fa fa-flag mr-1"></i>Reported'
+    : '<i class="fa fa-flag mr-1"></i>Report';
+  if (isReported) showToast('⚑ Comment reported');
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   COPY CODE BLOCK
+───────────────────────────────────────────────────────── */
+function copyCode(btn, codeId) {
+  var container = document.getElementById(codeId + '-raw');
+  if (!container) {
+    // Fallback: use the closest code-body pre
+    container = btn.closest('.code-block').querySelector('pre');
+  }
+  var text = (container.innerText || container.textContent || '').trim();
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function () { showToast('✓ Copied to clipboard!'); });
+  } else {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✓ Copied to clipboard!');
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   SORT BAR
+───────────────────────────────────────────────────────── */
+function setSort(btn, mode) {
+  document.querySelectorAll('.sort-btn').forEach(function (b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  // Re-sort based on mode
+  var list  = document.getElementById('comment-list');
+  var cards = Array.prototype.slice.call(list.querySelectorAll('article.comment-card'));
+
+  if (mode === 'top') {
+    cards.sort(function (a, b) {
+      return parseInt(document.getElementById(b.id + '-count').textContent, 10) -
+             parseInt(document.getElementById(a.id + '-count').textContent, 10);
+    });
+  } else if (mode === 'new') {
+    // Reverse the original order (just shuffle for demo)
+    cards.reverse();
+  } else if (mode === 'ctrl') {
+    // Controversial: lowest absolute score first
+    cards.sort(function (a, b) {
+      return Math.abs(parseInt(document.getElementById(a.id + '-count').textContent, 10)) -
+             Math.abs(parseInt(document.getElementById(b.id + '-count').textContent, 10));
+    });
+  }
+
+  cards.forEach(function (card) { list.appendChild(card); });
+  if (mode === 'top') highlightTop(cards);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────────────────── */
+var toastTimer;
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.opacity    = '1';
+  toast.style.transform  = 'translateX(-50%) translateY(0)';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
+    toast.style.opacity   = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 2200);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   INITIAL RANK (run once on load)
+───────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  rankComments();
+});
+</script>
+
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<nav class="bottomnav xl:hidden fixed bottom-0 left-0 right-0 flex justify-around py-2 z-50">
+  <a href="{% url 'home' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;">
+    <i class="fa-solid fa-house text-lg"></i><span class="text-[10px]">Home</span>
+  </a>
+  <a href="{% url 'leaderboard' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;">
+    <i class="fa-solid fa-trophy text-lg"></i><span class="text-[10px]">Leaderboard</span>
+  </a>
+  <a href="{% url 'settings' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;">
+    <i class="fa-solid fa-gear text-lg"></i><span class="text-[10px]">Settings</span>
+  </a>
+  <a href="{% url 'my_profile' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;">
+    <i class="fa-regular fa-user text-lg"></i><span class="text-[10px]">Profile</span>
+  </a>
+</nav>
+<div class="xl:hidden h-14"></div>
+
+<script>
+
+/* ─────────────────────────────────────────────────────────
+   THEME TOGGLE
+───────────────────────────────────────────────────────── */
+(function () {
+  var html  = document.documentElement;
+  var btn   = document.getElementById('themeToggle');
+  var saved = localStorage.getItem('codez-theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+
+  btn.addEventListener('click', function () {
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('codez-theme', next);
+  });
+})();
+
+
+/* ─────────────────────────────────────────────────────────
+   VOTE STATE
+   Tracks upvoted / downvoted state per post/comment ID.
+───────────────────────────────────────────────────────── */
+var voteState = {};  // { 'c1': 'up' | 'down' | null }
+
+function vote(id, dir) {
+  var countEl = document.getElementById(id + '-count');
+  var upBtn   = document.getElementById(id + '-up');
+  var downBtn = document.getElementById(id + '-down');
+
+  if (!countEl) return;
+
+  var current  = parseInt(countEl.textContent, 10);
+  var previous = voteState[id] || null;
+
+  // Remove previous highlights
+  upBtn.classList.remove('up-active');
+  downBtn.classList.remove('down-active');
+
+  if (previous === dir) {
+    // Toggle off: undo the vote
+    countEl.textContent = current + (dir === 'up' ? -1 : 1);
+    voteState[id] = null;
+  } else {
+    // Switch or new vote
+    var delta = 0;
+    if (previous === 'up')   delta -= 1;  // undo previous upvote
+    if (previous === 'down') delta += 1;  // undo previous downvote
+    delta += (dir === 'up' ? 1 : -1);    // apply new vote
+
+    countEl.textContent = current + delta;
+    voteState[id] = dir;
+
+    if (dir === 'up')   upBtn.classList.add('up-active');
+    else                downBtn.classList.add('down-active');
+  }
+
+  // Color negative counts red
+  if (parseInt(countEl.textContent, 10) < 0) {
+    countEl.style.color = '#ef4444';
+  } else {
+    countEl.style.color = '';
+  }
+
+  // Re-rank comments after every vote
+  rankComments();
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   RANKING LOGIC
+   Reads current vote counts and sorts comment cards by score.
+───────────────────────────────────────────────────────── */
+function rankComments() {
+  var list = document.getElementById('comment-list');
+  if (!list) return;
+
+  var cards = Array.prototype.slice.call(list.querySelectorAll('article.comment-card'));
+
+  cards.sort(function (a, b) {
+    var aId    = a.id;
+    var bId    = b.id;
+    var aCount = parseInt(document.getElementById(aId + '-count').textContent, 10);
+    var bCount = parseInt(document.getElementById(bId + '-count').textContent, 10);
+    return bCount - aCount;
+  });
+
+  // Re-append in sorted order
+  cards.forEach(function (card) { list.appendChild(card); });
+
+  // Highlight the top-voted comment
+  highlightTop(cards);
+}
+
+function highlightTop(cards) {
+  cards.forEach(function (card) { card.classList.remove('top-comment'); });
+
+  if (cards.length === 0) return;
+  // First card after sort = highest votes
+  var topCard = cards[0];
+  var topScore = parseInt(
+    document.getElementById(topCard.id + '-count').textContent, 10
+  );
+  // Only highlight if score is positive
+  if (topScore > 0) {
+    topCard.classList.add('top-comment');
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   MARK AS BUG
+───────────────────────────────────────────────────────── */
+function markBug(btn, id) {
+  var card = document.getElementById(id);
+  if (!card) return;
+
+  var isBugged = card.classList.toggle('bug-marked');
+  btn.classList.toggle('bug-active', isBugged);
+  btn.innerHTML = isBugged
+    ? '<i class="fa fa-bug mr-1"></i>Bug Marked'
+    : '<i class="fa fa-bug mr-1"></i>Mark as Bug';
+
+  showToast(isBugged ? '🐛 Marked as Bug' : 'Bug mark removed');
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   REPORT COMMENT
+───────────────────────────────────────────────────────── */
+function reportComment(btn, id) {
+  btn.classList.toggle('reported');
+  var isReported = btn.classList.contains('reported');
+  btn.innerHTML = isReported
+    ? '<i class="fa fa-flag mr-1"></i>Reported'
+    : '<i class="fa fa-flag mr-1"></i>Report';
+  if (isReported) showToast('⚑ Comment reported');
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   COPY CODE BLOCK
+───────────────────────────────────────────────────────── */
+function copyCode(btn, codeId) {
+  var container = document.getElementById(codeId + '-raw');
+  if (!container) {
+    // Fallback: use the closest code-body pre
+    container = btn.closest('.code-block').querySelector('pre');
+  }
+  var text = (container.innerText || container.textContent || '').trim();
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function () { showToast('✓ Copied to clipboard!'); });
+  } else {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✓ Copied to clipboard!');
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   SORT BAR
+───────────────────────────────────────────────────────── */
+function setSort(btn, mode) {
+  document.querySelectorAll('.sort-btn').forEach(function (b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  // Re-sort based on mode
+  var list  = document.getElementById('comment-list');
+  var cards = Array.prototype.slice.call(list.querySelectorAll('article.comment-card'));
+
+  if (mode === 'top') {
+    cards.sort(function (a, b) {
+      return parseInt(document.getElementById(b.id + '-count').textContent, 10) -
+             parseInt(document.getElementById(a.id + '-count').textContent, 10);
+    });
+  } else if (mode === 'new') {
+    // Reverse the original order (just shuffle for demo)
+    cards.reverse();
+  } else if (mode === 'ctrl') {
+    // Controversial: lowest absolute score first
+    cards.sort(function (a, b) {
+      return Math.abs(parseInt(document.getElementById(a.id + '-count').textContent, 10)) -
+             Math.abs(parseInt(document.getElementById(b.id + '-count').textContent, 10));
+    });
+  }
+
+  cards.forEach(function (card) { list.appendChild(card); });
+  if (mode === 'top') highlightTop(cards);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────────────────── */
+var toastTimer;
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.opacity    = '1';
+  toast.style.transform  = 'translateX(-50%) translateY(0)';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
+    toast.style.opacity   = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 2200);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   INITIAL RANK (run once on load)
+───────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  rankComments();
+});
+
+</script>
+
+<script>
+// ── AJAX Vote System (DB-backed) ─────────────────────────────────────────────
+const CSRF_TOKEN = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '';
+
+function voteQuestion(direction) {
+  {% if question and question.id %}
+  fetch('/api/vote/question/{{ question.id }}/', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRFToken':CSRF_TOKEN},
+    body: JSON.stringify({direction: direction})
+  }).then(r=>r.json()).then(d=>{
+    document.getElementById('post-count').textContent = d.total;
+    document.getElementById('post-up').style.color   = d.user_vote === 1  ? '#FF4500' : '';
+    document.getElementById('post-down').style.color = d.user_vote === -1 ? '#818cf8' : '';
+  });
+  {% endif %}
+}
+
+function voteAnswer(answerId, direction) {
+  fetch(`/api/vote/answer/${answerId}/`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','X-CSRFToken':CSRF_TOKEN},
+    body: JSON.stringify({direction: direction})
+  }).then(r=>r.json()).then(d=>{
+    const countEl = document.getElementById('ans-count-' + answerId);
+    if(countEl) countEl.textContent = d.total;
+    const upEl   = document.getElementById('ans-up-'    + answerId);
+    const downEl = document.getElementById('ans-down-'  + answerId);
+    if(upEl)   upEl.style.color   = d.user_vote ===  1 ? '#FF4500' : '';
+    if(downEl) downEl.style.color = d.user_vote === -1 ? '#818cf8' : '';
+  });
+}
+
+function toggleBookmark() {
+  {% if question and question.id %}
+  fetch('/api/bookmark/{{ question.id }}/', {
+    method: 'POST',
+    headers: {'X-CSRFToken':CSRF_TOKEN}
+  }).then(r=>r.json()).then(d=>{
+    const btn = document.getElementById('bookmarkBtn');
+    if(btn) {
+      btn.querySelector('i').className = d.bookmarked ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark';
+      btn.style.color = d.bookmarked ? '#6366f1' : '';
+    }
+  });
+  {% endif %}
+}
+
+function acceptAnswer(answerId) {
+  fetch(`/answer/${answerId}/accept/`, {
+    method: 'POST',
+    headers: {'X-CSRFToken':CSRF_TOKEN}
+  }).then(r=>r.json()).then(d=>{
+    document.querySelectorAll('.accept-btn').forEach(b => {
+      b.style.color = '';
+      b.title = 'Mark as accepted';
+    });
+    if(d.accepted) {
+      const btn = document.getElementById('accept-' + answerId);
+      if(btn) { btn.style.color = '#10B981'; btn.title = 'Accepted answer'; }
+    }
+  });
+}
+</script>
+
+</body>
+</html>

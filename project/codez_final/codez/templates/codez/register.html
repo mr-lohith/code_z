@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Register – CodeZ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --bg:#0d0d1a; --card:#13132a; --border:#252545; --muted:#7c7c9a;
+    --text:#e8e8ff; --text-sec:#a0a0c8; --input-bg:#0a0a18;
+    --indigo:#6366f1; --violet:#8b5cf6;
+  }
+  *{font-family:'DM Sans',sans-serif;box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);color:var(--text);min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:30px 16px;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 20% 10%,rgba(99,102,241,0.13) 0%,transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 80%,rgba(139,92,246,0.10) 0%,transparent 60%);
+  }
+  body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(99,102,241,0.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(99,102,241,0.04) 1px,transparent 1px);
+    background-size:40px 40px;}
+  .auth-wrap{position:relative;z-index:10;width:100%;max-width:460px;animation:fadeUp 0.45s ease both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  .auth-card{background:var(--card);border:1px solid var(--border);border-radius:18px;
+    padding:36px 32px;box-shadow:0 0 0 1px rgba(99,102,241,0.08),0 20px 60px rgba(0,0,0,0.55);}
+  .logo-row{display:flex;align-items:center;gap:10px;margin-bottom:26px;text-decoration:none;}
+  .logo-icon{width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,var(--indigo),var(--violet));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;
+    box-shadow:0 4px 14px rgba(99,102,241,0.4);}
+  .logo-text{font-weight:700;font-size:20px;color:var(--text);}
+  .logo-text span{background:linear-gradient(135deg,#818cf8,#a78bfa);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .auth-title{font-size:22px;font-weight:700;margin-bottom:4px;}
+  .auth-sub{font-size:13px;color:var(--text-sec);margin-bottom:22px;}
+  .auth-divider{height:1px;background:var(--border);margin:20px 0;}
+  .msg{padding:10px 14px;border-radius:10px;font-size:13px;
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .msg-error{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;}
+  .msg-success{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .form-group{margin-bottom:14px;}
+  .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-sec);
+    margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;}
+  .input-wrap{position:relative;}
+  .input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    color:var(--muted);font-size:13px;pointer-events:none;}
+  .codez-input{width:100%;background:var(--input-bg);border:1px solid var(--border);
+    border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;
+    font-size:14px;padding:11px 13px 11px 38px;outline:none;
+    transition:border-color 0.2s,box-shadow 0.2s;}
+  .codez-input::placeholder{color:var(--muted);}
+  .codez-input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.15);}
+  .pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:color 0.15s;}
+  .pw-toggle:hover{color:var(--text-sec);}
+  .field-error{font-size:11px;color:#fca5a5;margin-top:5px;display:flex;align-items:center;gap:4px;}
+  .btn-submit{width:100%;background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;
+    font-size:14px;font-weight:700;padding:12px;cursor:pointer;margin-top:6px;
+    box-shadow:0 4px 18px rgba(99,102,241,0.35);
+    transition:transform 0.15s,box-shadow 0.2s;}
+  .btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(99,102,241,0.45);}
+  .auth-footer{text-align:center;margin-top:20px;font-size:13px;color:var(--text-sec);}
+  .auth-footer a{color:var(--indigo);font-weight:600;text-decoration:none;transition:color 0.15s;}
+  .auth-footer a:hover{color:var(--violet);}
+  .strength-track{height:3px;background:var(--border);border-radius:99px;margin-top:7px;overflow:hidden;}
+  .strength-fill{height:100%;border-radius:99px;width:0;transition:width 0.3s,background 0.3s;}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+
+    <a href="{% url 'home' %}" class="logo-row">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <span class="logo-text">Code<span>Z</span></span>
+    </a>
+
+    <div class="auth-title">Create your account 🚀</div>
+    <div class="auth-sub">Join thousands of coders on CodeZ today</div>
+    <div class="auth-divider"></div>
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="msg msg-{{ message.tags }}"><i class="fas fa-circle-check"></i>{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+      <div class="msg msg-error">
+        <i class="fas fa-circle-xmark"></i>
+        {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-user"></i></span>
+            {{ form.username }}
+          </div>
+          {% for e in form.username.errors %}<div class="field-error"><i class="fas fa-triangle-exclamation"></i>{{ e }}</div>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            {{ form.email }}
+          </div>
+          {% for e in form.email.errors %}<div class="field-error"><i class="fas fa-triangle-exclamation"></i>{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password1 }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="strength-track"><div class="strength-fill" id="sf"></div></div>
+        {% for e in form.password1.errors %}<div class="field-error"><i class="fas fa-triangle-exclamation"></i>{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          {{ form.password2 }}
+          <button type="button" class="pw-toggle" onclick="togglePw(this)"><i class="fas fa-eye"></i></button>
+        </div>
+        {% for e in form.password2.errors %}<div class="field-error"><i class="fas fa-triangle-exclamation"></i>{{ e }}</div>{% endfor %}
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+</div>
+<script>
+function togglePw(btn){
+  const inp=btn.closest('.input-wrap').querySelector('input');
+  const ico=btn.querySelector('i');
+  inp.type=inp.type==='password'?'text':'password';
+  ico.className=inp.type==='text'?'fas fa-eye-slash':'fas fa-eye';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const pw=document.querySelector('input[name="password1"]');
+  const sf=document.getElementById('sf');
+  if(!pw||!sf)return;
+  pw.addEventListener('input',()=>{
+    const v=pw.value; let s=0;
+    if(v.length>=8)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+    sf.style.width=v?['25%','50%','75%','100%'][s-1]||'10%':'0%';
+    sf.style.background=v?['#EF4444','#F59E0B','#6366f1','#10B981'][s-1]||'#EF4444':'transparent';
+  });
+});
+</script>
+</body>
+</html>

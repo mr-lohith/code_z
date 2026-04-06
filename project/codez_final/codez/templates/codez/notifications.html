@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Notifications – CodeZ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{action:'#6366f1',actionHover:'#4f46e5',premium:'#FF6B35'},fontFamily:{sans:['DM Sans','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<style>
+:root{--bg:#F6F7F8;--card:#FFFFFF;--border:#EDEFF1;--muted:#878A8C;--text:#1a1a2e;--text-sec:#4b5563;--tag-bg:#ede9fe;--tag-text:#6d28d9;--nav-bg:#ffffff;--hover-row:#f5f3ff;--scroll-thumb:#c4b5fd;}
+[data-theme="dark"]{--bg:#0d0d1a;--card:#13132a;--border:#252545;--muted:#7c7c9a;--text:#e8e8ff;--text-sec:#a0a0c8;--tag-bg:#1e1b4b;--tag-text:#a78bfa;--nav-bg:#0f0f22;--hover-row:#1a1a35;--scroll-thumb:#4338ca;}
+*{font-family:'DM Sans',sans-serif;}
+body{background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+nav.topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);transition:background .3s,border-color .3s;}
+.card-base{background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.notif-row{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+.notif-row:last-child{border-bottom:none;}
+.notif-row:hover{background:var(--hover-row);}
+.notif-row.unread{background:var(--tag-bg);}
+.notif-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+nav.bottomnav{background:var(--nav-bg);border-top:1px solid var(--border);}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:3px;}
+#themeToggle{position:relative;width:46px;height:24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:99px;cursor:pointer;border:none;outline:none;}
+#themeToggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px rgba(0,0,0,.3);}
+[data-theme="dark"] #themeToggle::after{transform:translateX(22px);}
+#themeToggle .icon-sun{position:absolute;top:50%;transform:translateY(-50%);left:5px;font-size:10px;color:#fff;pointer-events:none;}
+#themeToggle .icon-moon{position:absolute;top:50%;transform:translateY(-50%);right:5px;font-size:10px;color:#fff;pointer-events:none;}
+.grad-text{background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="topnav sticky top-0 z-50 shadow-sm">
+  <div class="max-w-4xl mx-auto px-4 h-12 flex items-center gap-3">
+    <a href="{% url 'home' %}" class="flex items-center gap-2 min-w-max text-t" style="text-decoration:none;">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+        <i class="fa-solid fa-code text-white text-sm"></i>
+      </div>
+      <span class="font-bold text-lg hidden sm:block text-t">Code<span class="grad-text">Z</span></span>
+    </a>
+    <div class="ml-auto flex items-center gap-3">
+      <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <i class="icon-sun fa-solid fa-sun"></i><i class="icon-moon fa-solid fa-moon"></i>
+      </button>
+      <a href="{% url 'my_profile' %}" style="text-decoration:none;" class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+        {{ request.user.username|slice:':2'|upper }}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-2xl mx-auto px-4 py-6 pb-24">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-bold text-t flex items-center gap-2">
+      <i class="fa-solid fa-bell text-indigo-400"></i> Notifications
+    </h1>
+    <span class="text-xs font-semibold px-2 py-1 rounded-full" style="background:var(--tag-bg);color:#818cf8;">
+      {{ notifs|length }} total
+    </span>
+  </div>
+
+  <div class="card-base overflow-hidden">
+    {% if notifs %}
+      {% for notif in notifs %}
+      <div class="notif-row {% if not notif.is_read %}unread{% endif %}"
+           onclick="{% if notif.question %}window.location='{% url 'question_detail' notif.question.pk %}'{% endif %}">
+        <!-- Icon based on type -->
+        <div class="notif-icon
+          {% if notif.notif_type == 'upvote_q' or notif.notif_type == 'upvote_a' %}
+            text-orange-500" style="background:rgba(249,115,22,.12);">
+          <i class="fa-solid fa-arrow-up"></i>
+          {% elif notif.notif_type == 'comment' %}
+            text-indigo-400" style="background:rgba(99,102,241,.12);">
+          <i class="fa-solid fa-comment"></i>
+          {% elif notif.notif_type == 'follow' %}
+            text-pink-400" style="background:rgba(236,72,153,.12);">
+          <i class="fa-solid fa-user-plus"></i>
+          {% elif notif.notif_type == 'badge' %}
+            text-amber-400" style="background:rgba(245,158,11,.12);">
+          <i class="fa-solid fa-medal"></i>
+          {% elif notif.notif_type == 'accepted' %}
+            text-emerald-400" style="background:rgba(16,185,129,.12);">
+          <i class="fa-solid fa-check-circle"></i>
+          {% else %}
+            text-indigo-400" style="background:rgba(99,102,241,.12);">
+          <i class="fa-solid fa-bell"></i>
+          {% endif %}
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm {% if not notif.is_read %}font-semibold text-t{% else %}text-t{% endif %}">{{ notif.message }}</p>
+          <p class="text-[11px] mt-0.5" style="color:var(--muted);">{{ notif.created_at|timesince }} ago</p>
+        </div>
+        {% if not notif.is_read %}
+        <div class="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0 mt-1.5"></div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="py-16 text-center">
+        <i class="fa-regular fa-bell text-4xl mb-3" style="color:var(--muted);display:block;"></i>
+        <p class="text-sm font-semibold text-t">All caught up!</p>
+        <p class="text-xs mt-1" style="color:var(--muted);">No notifications yet. Start solving problems!</p>
+        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+          Browse Problems
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="bottomnav xl:hidden fixed bottom-0 left-0 right-0 flex justify-around py-2 z-50">
+  <a href="{% url 'home' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px]">Home</span></a>
+  <a href="{% url 'leaderboard' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-trophy text-lg"></i><span class="text-[10px]">Leaderboard</span></a>
+  <a href="{% url 'notifications' %}" class="flex flex-col items-center gap-0.5 text-indigo-400" style="text-decoration:none;"><i class="fa-solid fa-bell text-lg"></i><span class="text-[10px]">Alerts</span></a>
+  <a href="{% url 'my_profile' %}" class="flex flex-col items-center gap-0.5" style="color:var(--muted);text-decoration:none;"><i class="fa-regular fa-user text-lg"></i><span class="text-[10px]">Profile</span></a>
+</nav>
+<div class="xl:hidden h-14"></div>
+
+<script>
+function toggleTheme(){const h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');}
+(function(){if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+// Restore saved theme
+const saved=localStorage.getItem('codez-theme');if(saved)document.documentElement.setAttribute('data-theme',saved);
+document.getElementById('themeToggle').addEventListener('click',function(){const t=document.documentElement.getAttribute('data-theme');localStorage.setItem('codez-theme',t);});
+</script>
+</body>
+</html>
